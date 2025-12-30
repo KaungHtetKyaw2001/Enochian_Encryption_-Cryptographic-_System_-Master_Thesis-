@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>D:\Enochian Encryption System\Enochian Encryption System\Enochian Encryption System\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="DecryptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EncryptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EnochianEncryptionSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmAlphabetMapping.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmCardTagging.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmCoreDecryption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmCoreEncryption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmDecapsulation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmDeckCreation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmDigitalSignature.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmFinalization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmFirstShift.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmKeyEncapsulation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmKeyFactorGen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmKeyValidation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmMatrixAllocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmPackaging.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmPkgDelivery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmPlaintextCleaning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmPlaintextPrep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmReceiverConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmRegeneration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmReversedShifts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmSecondShift.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmSessionSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmSigVerification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmSortingSearching.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FrmTransmission.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
