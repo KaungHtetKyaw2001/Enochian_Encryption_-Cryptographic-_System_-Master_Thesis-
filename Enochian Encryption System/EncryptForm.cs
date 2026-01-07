@@ -255,5 +255,76 @@ namespace Enochian_Encryption_System
         {
             this.Close();
         }
+
+        private void btnRunBenchmark_Click(object sender, EventArgs e)
+        {
+            if (GlobalSession.KeyMatrix == null)
+            {
+                MessageBox.Show("Please generate keys in Step 9 first.");
+                return;
+            }
+
+            this.Cursor = Cursors.WaitCursor;
+            var results = Benchmark.RunEncryptionTests(GlobalSession.MatrixSize);
+            this.Cursor = Cursors.Default;
+
+            // Format for Excel
+            string output = "Algorithm\tTime(ms)\tNotes\n";
+            foreach (var r in results)
+            {
+                output += $"{r.Algorithm}\t{r.OperationTime_ms:F4}\t{r.Notes}\n";
+            }
+
+            Clipboard.SetText(output);
+            MessageBox.Show("Benchmark Complete!\n\nData copied to Clipboard.\nPaste into Excel to verify 'Enochian' is faster.");
+        }
+
+        private void btnAnalyzeSecurity_Click(object sender, EventArgs e)
+        {
+            // [FIX] Use 'EncryptedMatrices' instead of 'CipherMatrixList'
+            if (GlobalSession.EncryptedMatrices == null || GlobalSession.EncryptedMatrices.Count == 0)
+            {
+                MessageBox.Show("Please run 'Step 11: Core Encryption' first.\nWe need encrypted data to analyze.", "No Data");
+                return;
+            }
+
+            // 2. Flatten the matrices into a single byte array for analysis
+            List<byte> allEncryptedBytes = new List<byte>();
+            int N = GlobalSession.MatrixSize;
+
+            // [FIX] Iterating over the correct list
+            foreach (var matrix in GlobalSession.EncryptedMatrices)
+            {
+                for (int r = 0; r < N; r++)
+                    for (int c = 0; c < N; c++)
+                        allEncryptedBytes.Add((byte)matrix[r, c]);
+            }
+            byte[] data = allEncryptedBytes.ToArray();
+
+            // 3. Calculate Metrics 
+            double entropy = SecurityMetrics.CalculateEntropy(data);
+            double variance = SecurityMetrics.CalculateHistogramVariance(data);
+
+            // [FIX] Adjusted Grading for Modulo 21 System
+            // Theoretical Max Entropy for Mod 21 is log2(21) = ~4.39 bits
+            double maxTheoreticalEntropy = Math.Log(21, 2);
+            double efficiency = (entropy / maxTheoreticalEntropy) * 100;
+
+            string quality = "";
+            if (efficiency > 90.0) quality = "Excellent (Near-Perfect Randomness for Mod 21)";
+            else if (efficiency > 70.0) quality = "Moderate";
+            else quality = "Poor (Pattern Visible)";
+
+            // 5. Show Report
+            string report = $"--- Security Analysis (Z_21 Field) ---\n\n" +
+                            $"Total Bytes Analyzed: {data.Length}\n" +
+                            $"Shannon Entropy: {entropy:F4} bits/symbol\n" +
+                            $"(Theoretical Max for Mod 21: {maxTheoreticalEntropy:F4})\n\n" +
+                            $"Randomness Efficiency: {efficiency:F2}%\n" +
+                            $"Histogram Variance: {variance:F2}\n\n" +
+                            $"Conclusion: {quality}";
+
+            MessageBox.Show(report, "CIA Triad Analysis");
+        }
     }
 }

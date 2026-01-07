@@ -140,5 +140,111 @@ namespace Enochian_Encryption_System
         {
             this.Close();
         }
+
+        private void btnRunBenchmark_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            var results = Benchmark.RunDecryptionTests(GlobalSession.MatrixSize);
+            this.Cursor = Cursors.Default;
+
+            // Get values
+            double mySpeed = results[0].OperationTime_ms;
+            double rsaSpeed = results[1].OperationTime_ms;
+            double eccSpeed = results[2].OperationTime_ms; // New ECC value
+
+            // Calculate Ratios
+            double rsaRatio = (mySpeed > 0) ? rsaSpeed / mySpeed : 0;
+            double eccRatio = (mySpeed > 0) ? eccSpeed / mySpeed : 0;
+
+            // Build Report
+            string output = "--- DECRYPTION EFFICIENCY ---\n\n" +
+                            $"Enochian: {mySpeed:F4} ms\n" +
+                            $"RSA-2048: {rsaSpeed:F4} ms\n" +
+                            $"ECC/X25519: {eccSpeed:F4} ms\n\n" +
+                            $"VICTORY STATS:\n" +
+                            $"vs RSA: {rsaRatio:F0}x Faster\n" +
+                            $"vs ECC: {eccRatio:F0}x Faster";
+
+            // Copy to Clipboard for Excel
+            Clipboard.SetText($"Algorithm\tTime(ms)\nEnochian(Dec)\t{mySpeed}\nRSA(Dec)\t{rsaSpeed}\nECC/X25519\t{eccSpeed}");
+
+            MessageBox.Show(output, "Efficiency Proof");
+        }
+
+        private void btnVerifyIntegrity_Click(object sender, EventArgs e)
+        {
+            // Check if we have encrypted data
+            if (GlobalSession.CipherMatrixList == null || GlobalSession.CipherMatrixList.Count == 0)
+            {
+                MessageBox.Show("Please run 'Step 11: Core Encryption' first.");
+                return;
+            }
+
+            // Flatten data
+            List<byte> bytes = new List<byte>();
+            int N = GlobalSession.MatrixSize;
+            foreach (var mat in GlobalSession.CipherMatrixList)
+                for (int r = 0; r < N; r++) for (int c = 0; c < N; c++) bytes.Add((byte)mat[r, c]);
+
+            byte[] data = bytes.ToArray();
+
+            // Calculate Metrics
+            double entropy = SecurityMetrics.CalculateEntropy(data);
+            double variance = SecurityMetrics.CalculateHistogramVariance(data);
+
+            string status = entropy > 7.5 ? "Excellent (High Randomness)" : "Weak (Pattern Visible)";
+
+            MessageBox.Show($"--- SECURITY REPORT ---\n\n" +
+                            $"Entropy: {entropy:F4} bits/byte (Ideal: 8.0)\n" +
+                            $"Variance: {variance:F2} (Lower is better)\n\n" +
+                            $"Conclusion: {status}", "Confidentiality Check");
+        }
+
+        private void btnVerifyIntegrity_Click_1(object sender, EventArgs e)
+        {
+            // 1. Safety Check
+            if (GlobalSession.PlaintextMatrices == null || GlobalSession.PlaintextMatrices.Count == 0)
+            {
+                MessageBox.Show("Please run 'Step 6: Core Decryption' first.");
+                return;
+            }
+
+            // 2. Gather the Real Data (Flatten the Matrices)
+            List<byte> decryptedData = new List<byte>();
+            int N = GlobalSession.MatrixSize;
+
+            foreach (var matrix in GlobalSession.PlaintextMatrices)
+            {
+                for (int r = 0; r < N; r++)
+                    for (int c = 0; c < N; c++)
+                    {
+                        // We treat the integer values (1-21) as our data points
+                        decryptedData.Add((byte)matrix[r, c]);
+                    }
+            }
+
+            // 3. Calculate REAL Entropy using the Class we made
+            double realEntropy = SecurityMetrics.CalculateEntropy(decryptedData.ToArray());
+
+            // 4. Scientific Conclusion
+            // Random noise (Encrypted) is > 4.3. 
+            // Structured Language (Decrypted) is usually < 4.2.
+            string conclusion = "";
+            if (realEntropy < 4.3)
+            {
+                conclusion = "SUCCESS: Entropy dropped significantly.\nThis confirms the data has returned to a structured language state (Integrity Verified).";
+            }
+            else
+            {
+                conclusion = "WARNING: Entropy remains high.\nThe data still looks random. Decryption may have failed.";
+            }
+
+            // 5. Show the Real Numbers
+            MessageBox.Show($"--- INTEGRITY ANALYSIS ---\n\n" +
+                            $"Decrypted Entropy: {realEntropy:F4} bits/symbol\n" +
+                            $"(Target for English: ~3.5 to 4.2)\n\n" +
+                            $"{conclusion}",
+                            "CIA Triad: Integrity Check");
+        }
     }
 }

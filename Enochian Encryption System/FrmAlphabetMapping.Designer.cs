@@ -101,15 +101,15 @@
             // lstLog
             // 
             lstLog.FormattingEnabled = true;
-            lstLog.Location = new Point(377, 59);
+            lstLog.Location = new Point(435, 59);
             lstLog.Name = "lstLog";
-            lstLog.Size = new Size(387, 324);
+            lstLog.Size = new Size(329, 324);
             lstLog.TabIndex = 3;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(377, 36);
+            label3.Location = new Point(435, 36);
             label3.Name = "label3";
             label3.Size = new Size(224, 20);
             label3.TabIndex = 2;
@@ -131,7 +131,7 @@
             txtOutput.Multiline = true;
             txtOutput.Name = "txtOutput";
             txtOutput.ReadOnly = true;
-            txtOutput.Size = new Size(358, 324);
+            txtOutput.Size = new Size(417, 324);
             txtOutput.TabIndex = 1;
             // 
             // label2

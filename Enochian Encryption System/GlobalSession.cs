@@ -63,6 +63,10 @@ namespace Enochian_Encryption_System
         public static int[,] InverseKeyMatrix { get; set; }
         public static int KeyDeterminant { get; set; }
         public static List<int[,]> SBoxedMatrices { get; set; }
+
+        // [FIX] Added the missing property here
+        public static List<int[,]> CipherMatrixList { get; set; }
+
         public static List<int[,]> EncryptedMatrices { get; set; }
         #endregion
 
@@ -99,7 +103,6 @@ namespace Enochian_Encryption_System
             else DecryptionTimes.Add(stepName, ms);
         }
 
-        // [FIXED] Restored these methods causing CS0117
         public static double GetTotalEncryptionTime()
         {
             return EncryptionTimes.Sum(x => x.Value);
@@ -112,7 +115,6 @@ namespace Enochian_Encryption_System
         #endregion
 
         #region 8. Progress Flags (Fixed ReceiverKeyLoaded)
-        // [FIXED] Restored ReceiverKeyLoaded causing CS0117
         public static bool ReceiverKeyLoaded { get; set; } = false;
 
         public static bool Step1_Done { get; set; } = false;

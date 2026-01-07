@@ -39,8 +39,11 @@
             btnSignatureVerification = new Button();
             btnPackageDelivery = new Button();
             groupBox2 = new GroupBox();
+            btnVerifySecurity = new Button();
+            btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
+            btnVerifyIntegrity = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -155,18 +158,38 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnVerifyIntegrity);
+            groupBox2.Controls.Add(btnVerifySecurity);
+            groupBox2.Controls.Add(btnRunBenchmark);
             groupBox2.Controls.Add(btnViewStats);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox2.Location = new Point(12, 340);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(445, 109);
+            groupBox2.Size = new Size(690, 109);
             groupBox2.TabIndex = 8;
             groupBox2.TabStop = false;
             groupBox2.Text = "View Decryption Stats";
             // 
+            // btnVerifySecurity
+            // 
+            btnVerifySecurity.Location = new Point(0, 0);
+            btnVerifySecurity.Name = "btnVerifySecurity";
+            btnVerifySecurity.Size = new Size(75, 23);
+            btnVerifySecurity.TabIndex = 0;
+            // 
+            // btnRunBenchmark
+            // 
+            btnRunBenchmark.Location = new Point(247, 41);
+            btnRunBenchmark.Name = "btnRunBenchmark";
+            btnRunBenchmark.Size = new Size(194, 51);
+            btnRunBenchmark.TabIndex = 1;
+            btnRunBenchmark.Text = "Run Speed Benchmark";
+            btnRunBenchmark.UseVisualStyleBackColor = true;
+            btnRunBenchmark.Click += btnRunBenchmark_Click;
+            // 
             // btnViewStats
             // 
-            btnViewStats.Location = new Point(119, 41);
+            btnViewStats.Location = new Point(19, 41);
             btnViewStats.Name = "btnViewStats";
             btnViewStats.Size = new Size(194, 51);
             btnViewStats.TabIndex = 0;
@@ -184,6 +207,16 @@
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
+            // 
+            // btnVerifyIntegrity
+            // 
+            btnVerifyIntegrity.Location = new Point(472, 41);
+            btnVerifyIntegrity.Name = "btnVerifyIntegrity";
+            btnVerifyIntegrity.Size = new Size(194, 51);
+            btnVerifyIntegrity.TabIndex = 2;
+            btnVerifyIntegrity.Text = "Verify Integrity (CIA)";
+            btnVerifyIntegrity.UseVisualStyleBackColor = true;
+            btnVerifyIntegrity.Click += btnVerifyIntegrity_Click_1;
             // 
             // DecryptForm
             // 
@@ -217,5 +250,8 @@
         private GroupBox groupBox2;
         private Button btnViewStats;
         private Button btnBack;
+        private Button btnVerifySecurity;
+        private Button btnRunBenchmark;
+        private Button btnVerifyIntegrity;
     }
 }

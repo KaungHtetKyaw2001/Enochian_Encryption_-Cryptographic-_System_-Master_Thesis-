@@ -54,6 +54,8 @@
             btnFacts = new Button();
             btnEncSteps = new Button();
             groupBox4 = new GroupBox();
+            btnAnalyzeSecurity = new Button();
+            btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
             groupBox1.SuspendLayout();
@@ -332,18 +334,40 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(btnAnalyzeSecurity);
+            groupBox4.Controls.Add(btnRunBenchmark);
             groupBox4.Controls.Add(btnViewStats);
             groupBox4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox4.Location = new Point(12, 680);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(442, 88);
+            groupBox4.Size = new Size(764, 88);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "View Stats";
             // 
+            // btnAnalyzeSecurity
+            // 
+            btnAnalyzeSecurity.Location = new Point(503, 26);
+            btnAnalyzeSecurity.Name = "btnAnalyzeSecurity";
+            btnAnalyzeSecurity.Size = new Size(178, 48);
+            btnAnalyzeSecurity.TabIndex = 22;
+            btnAnalyzeSecurity.Text = "Analyze Security (Entropy)";
+            btnAnalyzeSecurity.UseVisualStyleBackColor = true;
+            btnAnalyzeSecurity.Click += btnAnalyzeSecurity_Click;
+            // 
+            // btnRunBenchmark
+            // 
+            btnRunBenchmark.Location = new Point(291, 26);
+            btnRunBenchmark.Name = "btnRunBenchmark";
+            btnRunBenchmark.Size = new Size(178, 48);
+            btnRunBenchmark.TabIndex = 21;
+            btnRunBenchmark.Text = "Run Speed Benchmark";
+            btnRunBenchmark.UseVisualStyleBackColor = true;
+            btnRunBenchmark.Click += btnRunBenchmark_Click;
+            // 
             // btnViewStats
             // 
-            btnViewStats.Location = new Point(116, 26);
+            btnViewStats.Location = new Point(80, 26);
             btnViewStats.Name = "btnViewStats";
             btnViewStats.Size = new Size(178, 48);
             btnViewStats.TabIndex = 20;
@@ -415,5 +439,7 @@
         private Button btnViewStats;
         private Button btnKeyValidation;
         private Button btnBack;
+        private Button btnAnalyzeSecurity;
+        private Button btnRunBenchmark;
     }
 }
