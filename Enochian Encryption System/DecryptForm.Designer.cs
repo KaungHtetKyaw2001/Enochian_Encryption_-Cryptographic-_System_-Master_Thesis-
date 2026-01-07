@@ -39,11 +39,11 @@
             btnSignatureVerification = new Button();
             btnPackageDelivery = new Button();
             groupBox2 = new GroupBox();
-            btnVerifySecurity = new Button();
+            btnVerifyIntegrity = new Button();
             btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
-            btnVerifyIntegrity = new Button();
+            btnCheckQuantumDecrypt = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -52,7 +52,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 25F, FontStyle.Bold);
-            label1.Location = new Point(198, 9);
+            label1.Location = new Point(274, 9);
             label1.Name = "label1";
             label1.Size = new Size(389, 57);
             label1.TabIndex = 1;
@@ -71,14 +71,14 @@
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox1.Location = new Point(12, 81);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(844, 253);
+            groupBox1.Size = new Size(955, 253);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Decryption Steps";
             // 
             // btnFinalization
             // 
-            btnFinalization.Location = new Point(630, 131);
+            btnFinalization.Location = new Point(741, 132);
             btnFinalization.Name = "btnFinalization";
             btnFinalization.Size = new Size(188, 93);
             btnFinalization.TabIndex = 7;
@@ -88,9 +88,9 @@
             // 
             // btnReverseShifts
             // 
-            btnReverseShifts.Location = new Point(423, 131);
+            btnReverseShifts.Location = new Point(499, 131);
             btnReverseShifts.Name = "btnReverseShifts";
-            btnReverseShifts.Size = new Size(178, 93);
+            btnReverseShifts.Size = new Size(186, 93);
             btnReverseShifts.TabIndex = 6;
             btnReverseShifts.Text = "Step 7: Reversed Shifts";
             btnReverseShifts.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@
             // 
             // btnCoreDecryption
             // 
-            btnCoreDecryption.Location = new Point(210, 131);
+            btnCoreDecryption.Location = new Point(243, 130);
             btnCoreDecryption.Name = "btnCoreDecryption";
             btnCoreDecryption.Size = new Size(182, 94);
             btnCoreDecryption.TabIndex = 5;
@@ -118,7 +118,7 @@
             // 
             // btnSortingandSearching
             // 
-            btnSortingandSearching.Location = new Point(630, 37);
+            btnSortingandSearching.Location = new Point(741, 37);
             btnSortingandSearching.Name = "btnSortingandSearching";
             btnSortingandSearching.Size = new Size(188, 62);
             btnSortingandSearching.TabIndex = 3;
@@ -128,7 +128,7 @@
             // 
             // btnDecapsulation
             // 
-            btnDecapsulation.Location = new Point(415, 37);
+            btnDecapsulation.Location = new Point(499, 37);
             btnDecapsulation.Name = "btnDecapsulation";
             btnDecapsulation.Size = new Size(186, 62);
             btnDecapsulation.TabIndex = 2;
@@ -138,7 +138,7 @@
             // 
             // btnSignatureVerification
             // 
-            btnSignatureVerification.Location = new Point(210, 37);
+            btnSignatureVerification.Location = new Point(243, 37);
             btnSignatureVerification.Name = "btnSignatureVerification";
             btnSignatureVerification.Size = new Size(182, 62);
             btnSignatureVerification.TabIndex = 1;
@@ -158,30 +158,33 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnCheckQuantumDecrypt);
             groupBox2.Controls.Add(btnVerifyIntegrity);
-            groupBox2.Controls.Add(btnVerifySecurity);
             groupBox2.Controls.Add(btnRunBenchmark);
             groupBox2.Controls.Add(btnViewStats);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox2.Location = new Point(12, 340);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(690, 109);
+            groupBox2.Size = new Size(775, 109);
             groupBox2.TabIndex = 8;
             groupBox2.TabStop = false;
             groupBox2.Text = "View Decryption Stats";
             // 
-            // btnVerifySecurity
+            // btnVerifyIntegrity
             // 
-            btnVerifySecurity.Location = new Point(0, 0);
-            btnVerifySecurity.Name = "btnVerifySecurity";
-            btnVerifySecurity.Size = new Size(75, 23);
-            btnVerifySecurity.TabIndex = 0;
+            btnVerifyIntegrity.Location = new Point(402, 41);
+            btnVerifyIntegrity.Name = "btnVerifyIntegrity";
+            btnVerifyIntegrity.Size = new Size(166, 51);
+            btnVerifyIntegrity.TabIndex = 2;
+            btnVerifyIntegrity.Text = "Verify Integrity (CIA)";
+            btnVerifyIntegrity.UseVisualStyleBackColor = true;
+            btnVerifyIntegrity.Click += btnVerifyIntegrity_Click_1;
             // 
             // btnRunBenchmark
             // 
-            btnRunBenchmark.Location = new Point(247, 41);
+            btnRunBenchmark.Location = new Point(202, 41);
             btnRunBenchmark.Name = "btnRunBenchmark";
-            btnRunBenchmark.Size = new Size(194, 51);
+            btnRunBenchmark.Size = new Size(177, 51);
             btnRunBenchmark.TabIndex = 1;
             btnRunBenchmark.Text = "Run Speed Benchmark";
             btnRunBenchmark.UseVisualStyleBackColor = true;
@@ -189,9 +192,9 @@
             // 
             // btnViewStats
             // 
-            btnViewStats.Location = new Point(19, 41);
+            btnViewStats.Location = new Point(6, 41);
             btnViewStats.Name = "btnViewStats";
-            btnViewStats.Size = new Size(194, 51);
+            btnViewStats.Size = new Size(177, 51);
             btnViewStats.TabIndex = 0;
             btnViewStats.Text = "View Decryption Stats";
             btnViewStats.UseVisualStyleBackColor = true;
@@ -200,7 +203,7 @@
             // btnBack
             // 
             btnBack.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnBack.Location = new Point(708, 381);
+            btnBack.Location = new Point(793, 381);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(148, 51);
             btnBack.TabIndex = 1;
@@ -208,21 +211,21 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
-            // btnVerifyIntegrity
+            // btnCheckQuantumDecrypt
             // 
-            btnVerifyIntegrity.Location = new Point(472, 41);
-            btnVerifyIntegrity.Name = "btnVerifyIntegrity";
-            btnVerifyIntegrity.Size = new Size(194, 51);
-            btnVerifyIntegrity.TabIndex = 2;
-            btnVerifyIntegrity.Text = "Verify Integrity (CIA)";
-            btnVerifyIntegrity.UseVisualStyleBackColor = true;
-            btnVerifyIntegrity.Click += btnVerifyIntegrity_Click_1;
+            btnCheckQuantumDecrypt.Location = new Point(592, 41);
+            btnCheckQuantumDecrypt.Name = "btnCheckQuantumDecrypt";
+            btnCheckQuantumDecrypt.Size = new Size(166, 51);
+            btnCheckQuantumDecrypt.TabIndex = 3;
+            btnCheckQuantumDecrypt.Text = "Check Quantum Safety";
+            btnCheckQuantumDecrypt.UseVisualStyleBackColor = true;
+            btnCheckQuantumDecrypt.Click += btnCheckQuantumDecrypt_Click;
             // 
             // DecryptForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(868, 461);
+            ClientSize = new Size(979, 461);
             Controls.Add(btnBack);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -250,8 +253,8 @@
         private GroupBox groupBox2;
         private Button btnViewStats;
         private Button btnBack;
-        private Button btnVerifySecurity;
         private Button btnRunBenchmark;
         private Button btnVerifyIntegrity;
+        private Button btnCheckQuantumDecrypt;
     }
 }

@@ -246,5 +246,57 @@ namespace Enochian_Encryption_System
                             $"{conclusion}",
                             "CIA Triad: Integrity Check");
         }
+
+        private void btnCheckQuantumDecrypt_Click(object sender, EventArgs e)
+        {
+            // 1. Get current Matrix Size (N)
+            int N = GlobalSession.MatrixSize;
+            if (N == 0) N = 10;
+
+            // 2. Calculate Key Space
+            double bitsPerCell = Math.Log(21, 2);
+            double totalBits = (N * N) * bitsPerCell;
+
+            // 3. Apply Quantum Damage
+            double quantumBits = totalBits / 2;
+
+            // --- DYNAMIC TEXT LOGIC ---
+
+            // A. Classical Check
+            string classicalNote = (totalBits > 100)
+                ? "(Computationally Infeasible for Supercomputers)"
+                : "(WARNING: Vulnerable to Modern Brute Force)";
+
+            // B. Quantum Check & Dynamic Description
+            string quantumNote = "";
+            string status = "";
+            string groverNote = ""; // <--- NEW DYNAMIC VARIABLE
+
+            if (quantumBits >= 128)
+            {
+                quantumNote = "(Resistant to Grover's Algorithm)";
+                status = "SECURE";
+                groverNote = "Reduces strength by 50% (Result remains Safe)";
+            }
+            else
+            {
+                quantumNote = "(Vulnerable to Quantum Decryption)";
+                status = "WEAK";
+                groverNote = "CRITICAL: Reduces strength by 50% (Result becomes Unsafe)";
+            }
+
+            // 4. Build Report
+            string report = "--- DECRYPTION QUANTUM DEFENSE ---\n\n" +
+                            $"Decryption Matrix: {N}x{N}\n" +
+                            $"Field Size: Z_21\n\n" +
+                            $"1. Attack Complexity (Classical): 2^{totalBits:F0}\n" +
+                            $"   {classicalNote}\n\n" +
+                            $"2. Attack Complexity (Quantum): 2^{quantumBits:F0}\n" +
+                            $"   {groverNote}\n" +  // <--- Inserted Here
+                            $"   {quantumNote}\n\n" +
+                            $"CONCLUSION: This received package is QUANTUM {status}.";
+
+            MessageBox.Show(report, "Post-Quantum Analysis");
+        }
     }
 }

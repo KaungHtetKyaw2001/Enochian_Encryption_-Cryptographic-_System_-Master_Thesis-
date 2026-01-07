@@ -82,6 +82,7 @@ namespace Enochian_Encryption_System
                 lblStatus.ForeColor = System.Drawing.Color.Green;
                 btnConfirm.Enabled = true;
                 sw.Stop();
+                GlobalSession.LogDecTime("Step 6: Core Decryption", sw.Elapsed.TotalMilliseconds);
                 MessageBox.Show($"Success!\nDecrypted {decryptedMatrices.Count} blocks.");
             }
             catch (Exception ex) { sw.Stop(); MessageBox.Show("Error: " + ex.Message); }

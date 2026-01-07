@@ -258,6 +258,7 @@ namespace Enochian_Encryption_System
 
         private void btnRunBenchmark_Click(object sender, EventArgs e)
         {
+            // 1. Safety Check
             if (GlobalSession.KeyMatrix == null)
             {
                 MessageBox.Show("Please generate keys in Step 9 first.");
@@ -265,18 +266,35 @@ namespace Enochian_Encryption_System
             }
 
             this.Cursor = Cursors.WaitCursor;
+
+            // 2. Run Encryption Tests (Using the Encryption benchmark)
             var results = Benchmark.RunEncryptionTests(GlobalSession.MatrixSize);
+
             this.Cursor = Cursors.Default;
 
-            // Format for Excel
-            string output = "Algorithm\tTime(ms)\tNotes\n";
-            foreach (var r in results)
-            {
-                output += $"{r.Algorithm}\t{r.OperationTime_ms:F4}\t{r.Notes}\n";
-            }
+            // 3. Get values (Order: 0=Enochian, 1=RSA, 2=ECC)
+            double mySpeed = results[0].OperationTime_ms;
+            double rsaSpeed = results[1].OperationTime_ms;
+            double eccSpeed = results[2].OperationTime_ms;
 
-            Clipboard.SetText(output);
-            MessageBox.Show("Benchmark Complete!\n\nData copied to Clipboard.\nPaste into Excel to verify 'Enochian' is faster.");
+            // 4. Calculate Ratios (How many times faster?)
+            double rsaRatio = (mySpeed > 0) ? rsaSpeed / mySpeed : 0;
+            double eccRatio = (mySpeed > 0) ? eccSpeed / mySpeed : 0;
+
+            // 5. Build Report
+            string output = "--- ENCRYPTION EFFICIENCY ---\n\n" +
+                            $"Enochian: {mySpeed:F4} ms\n" +
+                            $"RSA-2048: {rsaSpeed:F4} ms\n" +
+                            $"ECC/X25519: {eccSpeed:F4} ms\n\n" +
+                            $"VICTORY STATS:\n" +
+                            $"vs RSA: {rsaRatio:F0}x Faster\n" +
+                            $"vs ECC: {eccRatio:F0}x Faster";
+
+            // 6. Copy to Clipboard for Excel
+            Clipboard.SetText($"Algorithm\tTime(ms)\nEnochian(Enc)\t{mySpeed}\nRSA(Enc)\t{rsaSpeed}\nECC/X25519\t{eccSpeed}");
+
+            // 7. Show Result
+            MessageBox.Show(output, "Efficiency Proof (Encryption)");
         }
 
         private void btnAnalyzeSecurity_Click(object sender, EventArgs e)
@@ -325,6 +343,61 @@ namespace Enochian_Encryption_System
                             $"Conclusion: {quality}";
 
             MessageBox.Show(report, "CIA Triad Analysis");
+        }
+
+        private void btnCheckQuantum_Click(object sender, EventArgs e)
+        {
+            // 1. Get current Matrix Size (N)
+            int N = GlobalSession.MatrixSize;
+            if (N == 0) N = 10;
+
+            // 2. Calculate Key Space in Bits
+            double bitsPerCell = Math.Log(21, 2);
+            double totalBits = (N * N) * bitsPerCell;
+
+            // 3. Apply Quantum "Damage"
+            double quantumBits = totalBits / 2;
+
+            // --- DYNAMIC TEXT LOGIC ---
+
+            // A. RSA Comparison
+            string rsaComparison = (totalBits > 112)
+                ? $"(Stronger than RSA-2048: {totalBits:F0} > 112)"
+                : $"(Weaker than RSA-2048: {totalBits:F0} < 112)";
+
+            // B. Quantum Status & Dynamic Description
+            string standardCheck = "";
+            string status = "";
+            string groverDescription = ""; // <--- NEW DYNAMIC VARIABLE
+
+            if (quantumBits >= 128)
+            {
+                standardCheck = "PASSED (Meets >128 Bit Requirement)";
+                status = "SECURE";
+                // Context: It drops 50%, but we don't care because we have enough.
+                groverDescription = "Reduces strength by 50% (Result is still above Safety Threshold)";
+            }
+            else
+            {
+                standardCheck = "FAILED (Below >128 Bit Requirement)";
+                status = "WEAK (Increase Matrix Size)";
+                // Context: The 50% drop is what killed us.
+                groverDescription = "CRITICAL: Reduces strength by 50% (Drops below Safety Threshold)";
+            }
+
+            // 4. Build Report
+            string report = "--- POST-QUANTUM RESISTANCE PROOF ---\n\n" +
+                            $"Matrix Size: {N}x{N}\n" +
+                            $"Field Size: Z_21\n\n" +
+                            $"1. Classical Key Strength: {totalBits:F0} Bits\n" +
+                            $"   {rsaComparison}\n\n" +
+                            $"2. Quantum Attack (Grover's Algo): {groverDescription}\n" + // <--- Inserted Here
+                            $"   Remaining Strength: {quantumBits:F0} Bits\n\n" +
+                            $"3. Standard Requirement: >128 Bits\n" +
+                            $"   Result: {standardCheck}\n\n" +
+                            $"CONCLUSION: System is QUANTUM {status}.";
+
+            MessageBox.Show(report, "Quantum Analysis");
         }
     }
 }

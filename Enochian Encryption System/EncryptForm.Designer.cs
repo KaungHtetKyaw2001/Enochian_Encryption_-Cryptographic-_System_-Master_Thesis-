@@ -58,6 +58,7 @@
             btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
+            btnCheckQuantum = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -334,6 +335,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(btnCheckQuantum);
             groupBox4.Controls.Add(btnAnalyzeSecurity);
             groupBox4.Controls.Add(btnRunBenchmark);
             groupBox4.Controls.Add(btnViewStats);
@@ -347,7 +349,7 @@
             // 
             // btnAnalyzeSecurity
             // 
-            btnAnalyzeSecurity.Location = new Point(503, 26);
+            btnAnalyzeSecurity.Location = new Point(383, 26);
             btnAnalyzeSecurity.Name = "btnAnalyzeSecurity";
             btnAnalyzeSecurity.Size = new Size(178, 48);
             btnAnalyzeSecurity.TabIndex = 22;
@@ -357,7 +359,7 @@
             // 
             // btnRunBenchmark
             // 
-            btnRunBenchmark.Location = new Point(291, 26);
+            btnRunBenchmark.Location = new Point(199, 26);
             btnRunBenchmark.Name = "btnRunBenchmark";
             btnRunBenchmark.Size = new Size(178, 48);
             btnRunBenchmark.TabIndex = 21;
@@ -367,7 +369,7 @@
             // 
             // btnViewStats
             // 
-            btnViewStats.Location = new Point(80, 26);
+            btnViewStats.Location = new Point(15, 26);
             btnViewStats.Name = "btnViewStats";
             btnViewStats.Size = new Size(178, 48);
             btnViewStats.TabIndex = 20;
@@ -385,6 +387,16 @@
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
+            // 
+            // btnCheckQuantum
+            // 
+            btnCheckQuantum.Location = new Point(567, 26);
+            btnCheckQuantum.Name = "btnCheckQuantum";
+            btnCheckQuantum.Size = new Size(178, 48);
+            btnCheckQuantum.TabIndex = 23;
+            btnCheckQuantum.Text = "Check Quantum Safety";
+            btnCheckQuantum.UseVisualStyleBackColor = true;
+            btnCheckQuantum.Click += btnCheckQuantum_Click;
             // 
             // EncryptForm
             // 
@@ -441,5 +453,6 @@
         private Button btnBack;
         private Button btnAnalyzeSecurity;
         private Button btnRunBenchmark;
+        private Button btnCheckQuantum;
     }
 }
