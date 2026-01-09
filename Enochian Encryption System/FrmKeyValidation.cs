@@ -29,6 +29,8 @@ namespace Enochian_Encryption_System
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
             Stopwatch sw = Stopwatch.StartNew();
 
             try
@@ -48,7 +50,7 @@ namespace Enochian_Encryption_System
                 BigInteger gcd = BigInteger.GreatestCommonDivisor(BigInteger.Abs(modDet), 21);
 
                 sw.Stop();
-
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                 Control[] statusCtrls = this.Controls.Find("lblStatus", true);
 
                 if (gcd == 1)

@@ -107,6 +107,9 @@ namespace Enochian_Encryption_System
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             string rawInput = "";
 
@@ -146,6 +149,7 @@ namespace Enochian_Encryption_System
             btnConfirm.Enabled = true;
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 3: Plaintext Prep", sw.Elapsed.TotalMilliseconds);
         }
 

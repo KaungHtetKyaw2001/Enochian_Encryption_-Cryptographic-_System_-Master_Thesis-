@@ -298,5 +298,36 @@ namespace Enochian_Encryption_System
 
             MessageBox.Show(report, "Post-Quantum Analysis");
         }
+
+        private void btnStatTime_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- DECRYPTION TIME ---\n\n" +
+                    $"Step: Gaussian Elimination (Inverse)\n" +
+                    $"Value: {GlobalSession.Core_Dec_TimeMs:F4} ms", "Efficiency Metric");
+        }
+
+        private void btnStatMemory_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- DECRYPTION MEMORY ---\n\n" +
+                    $"Step: BigInteger Calculation Overhead\n" +
+                    $"Value: {GlobalSession.Total_Dec_MemBytes} Bytes", "Resource Consumption");
+        }
+
+        private void btnStatCPU_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- DECRYPTION CPU ---\n\n" +
+                    $"Step: Inverse Key Processing\n" +
+                    $"Value: {GlobalSession.Total_Dec_CpuMs:F6} ms", "Power Consumption");
+        }
+
+        private void btnStatComplexity_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- ALGORITHMIC COMPLEXITY ---\n\n" +
+                    $"Class: {GlobalSession.Dec_Complexity}\n\n" +
+                    $"Comparison:\n" +
+                    $"RSA: O(k^3) [Exponential]\n" +
+                    $"Enochian: O(N^3) [Polynomial]",
+                    "Big-O Analysis");
+        }
     }
 }

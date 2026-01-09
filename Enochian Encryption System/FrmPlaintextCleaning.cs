@@ -41,6 +41,9 @@ namespace Enochian_Encryption_System
 
         private void btnClean_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             // 1. START TIMER
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -73,6 +76,7 @@ namespace Enochian_Encryption_System
 
             // 3. STOP TIMER
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
 
             // 4. UPDATE UI
             txtOutput.Text = _tempCleanedText;

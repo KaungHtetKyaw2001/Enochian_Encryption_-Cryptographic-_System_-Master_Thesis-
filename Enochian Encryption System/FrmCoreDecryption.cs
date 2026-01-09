@@ -26,6 +26,15 @@ namespace Enochian_Encryption_System
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
+            // 1. [NEW] PREPARE MEASUREMENT
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            long startMem = GC.GetTotalMemory(true);
+            TimeSpan startCpu = Process.GetCurrentProcess().TotalProcessorTime;
+
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -81,8 +90,15 @@ namespace Enochian_Encryption_System
                 lblStatus.Text = "Decryption Complete";
                 lblStatus.ForeColor = System.Drawing.Color.Green;
                 btnConfirm.Enabled = true;
+                // 2. [NEW] STOP MEASUREMENT & UPDATE BUTTONS
                 sw.Stop();
+                probe.StopAndAccumulate();
+                GlobalSession.Core_Dec_TimeMs = sw.Elapsed.TotalMilliseconds;
+                long endMem = GC.GetTotalMemory(false);
+                TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
+
                 GlobalSession.LogDecTime("Step 6: Core Decryption", sw.Elapsed.TotalMilliseconds);
+
                 MessageBox.Show($"Success!\nDecrypted {decryptedMatrices.Count} blocks.");
             }
             catch (Exception ex) { sw.Stop(); MessageBox.Show("Error: " + ex.Message); }

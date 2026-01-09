@@ -71,6 +71,8 @@ namespace Enochian_Encryption_System
 
         private void btnSort_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
             Stopwatch sw = Stopwatch.StartNew();
 
             // 1. BUCKETING (Handle Collisions)
@@ -111,6 +113,7 @@ namespace Enochian_Encryption_System
             }
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogDecTime("Decryption Step 4a: Sorting", sw.Elapsed.TotalMilliseconds);
 
             // 3. UI UPDATE
@@ -146,6 +149,7 @@ namespace Enochian_Encryption_System
             if (_sortedDeck.Count == 0) return;
 
             // Search for the middle card to demonstrate
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
             int targetIndex = _sortedDeck.Count / 2;
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -162,6 +166,7 @@ namespace Enochian_Encryption_System
                 MessageBox.Show($"Validation Successful!\n\nMatched Card #{targetIndex}\nTag: {foundCard.Tag}\n\nData Content:\n{GetSquareMatrixString(foundCard.Matrix)}", "Integrity Check");
 
                 sw.Stop();
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                 GlobalSession.LogDecTime("Decryption Step 4b: Binary Search", sw.Elapsed.TotalMilliseconds);
                 GlobalSession.DecStep4_Done = true;
 

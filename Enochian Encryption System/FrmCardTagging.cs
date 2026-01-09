@@ -46,6 +46,9 @@ namespace Enochian_Encryption_System
 
         private void btnTag_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             _generatedTags.Clear();
             dgvTags.Rows.Clear();
@@ -98,6 +101,7 @@ namespace Enochian_Encryption_System
             }
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 12: Card Tagging", sw.Elapsed.TotalMilliseconds);
 
             // 2. SAVE MANIFEST

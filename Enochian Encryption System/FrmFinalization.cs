@@ -30,6 +30,9 @@ namespace Enochian_Encryption_System
 
         private void btnFinalize_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
 
             try
@@ -96,6 +99,7 @@ namespace Enochian_Encryption_System
                 string formattedOutput = ApplySentenceCase(finalOutputString);
 
                 sw.Stop();
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                 GlobalSession.LogDecTime("Step 8: Finalization", sw.Elapsed.TotalMilliseconds);
 
                 // OUTPUT

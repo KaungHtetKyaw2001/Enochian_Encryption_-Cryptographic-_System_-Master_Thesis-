@@ -51,7 +51,7 @@
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(392, 174);
+            groupBox1.Size = new Size(483, 174);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Validation Data";
@@ -61,7 +61,7 @@
             lblStatus.BorderStyle = BorderStyle.FixedSingle;
             lblStatus.Location = new Point(115, 84);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(266, 32);
+            lblStatus.Size = new Size(362, 32);
             lblStatus.TabIndex = 5;
             // 
             // label3
@@ -78,7 +78,7 @@
             lblDet.BorderStyle = BorderStyle.FixedSingle;
             lblDet.Location = new Point(115, 37);
             lblDet.Name = "lblDet";
-            lblDet.Size = new Size(266, 32);
+            lblDet.Size = new Size(362, 32);
             lblDet.TabIndex = 1;
             // 
             // label1
@@ -96,7 +96,7 @@
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox2.Location = new Point(12, 192);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(392, 355);
+            groupBox2.Size = new Size(483, 355);
             groupBox2.TabIndex = 6;
             groupBox2.TabStop = false;
             groupBox2.Text = "Matrices";
@@ -107,13 +107,13 @@
             dgvOriginal.Location = new Point(11, 26);
             dgvOriginal.Name = "dgvOriginal";
             dgvOriginal.RowHeadersWidth = 51;
-            dgvOriginal.Size = new Size(370, 294);
+            dgvOriginal.Size = new Size(466, 323);
             dgvOriginal.TabIndex = 3;
             // 
             // btnValidate
             // 
             btnValidate.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnValidate.Location = new Point(12, 568);
+            btnValidate.Location = new Point(23, 568);
             btnValidate.Name = "btnValidate";
             btnValidate.Size = new Size(226, 29);
             btnValidate.TabIndex = 7;
@@ -124,7 +124,7 @@
             // btnConfirm
             // 
             btnConfirm.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnConfirm.Location = new Point(261, 568);
+            btnConfirm.Location = new Point(346, 568);
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(143, 29);
             btnConfirm.TabIndex = 8;
@@ -136,7 +136,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(422, 609);
+            ClientSize = new Size(507, 609);
             Controls.Add(btnConfirm);
             Controls.Add(btnValidate);
             Controls.Add(groupBox2);

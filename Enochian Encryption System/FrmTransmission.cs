@@ -37,6 +37,9 @@ namespace Enochian_Encryption_System
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             btnExport.Enabled = false;
             lstLog.Items.Clear();
@@ -157,6 +160,7 @@ namespace Enochian_Encryption_System
                     lblFileStatus.Text = "Export Complete";
 
                     sw.Stop();
+                    probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                     GlobalSession.LogEncTime("Step 16: Secure Transmission", sw.Elapsed.TotalMilliseconds);
 
                     MessageBox.Show($"Secure Transmission File Generated!\n\n" +

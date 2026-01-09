@@ -54,11 +54,15 @@
             btnFacts = new Button();
             btnEncSteps = new Button();
             groupBox4 = new GroupBox();
+            btnStatComplexity = new Button();
+            btnStatCPU = new Button();
+            btnStatMemory = new Button();
+            btnStatTime = new Button();
+            btnCheckQuantum = new Button();
             btnAnalyzeSecurity = new Button();
             btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
-            btnCheckQuantum = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -335,6 +339,10 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(btnStatComplexity);
+            groupBox4.Controls.Add(btnStatCPU);
+            groupBox4.Controls.Add(btnStatMemory);
+            groupBox4.Controls.Add(btnStatTime);
             groupBox4.Controls.Add(btnCheckQuantum);
             groupBox4.Controls.Add(btnAnalyzeSecurity);
             groupBox4.Controls.Add(btnRunBenchmark);
@@ -342,10 +350,60 @@
             groupBox4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox4.Location = new Point(12, 680);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(764, 88);
+            groupBox4.Size = new Size(764, 143);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "View Stats";
+            // 
+            // btnStatComplexity
+            // 
+            btnStatComplexity.Location = new Point(567, 80);
+            btnStatComplexity.Name = "btnStatComplexity";
+            btnStatComplexity.Size = new Size(178, 48);
+            btnStatComplexity.TabIndex = 27;
+            btnStatComplexity.Text = "Complexity Stats";
+            btnStatComplexity.UseVisualStyleBackColor = true;
+            btnStatComplexity.Click += btnStatComplexity_Click;
+            // 
+            // btnStatCPU
+            // 
+            btnStatCPU.Location = new Point(383, 80);
+            btnStatCPU.Name = "btnStatCPU";
+            btnStatCPU.Size = new Size(178, 48);
+            btnStatCPU.TabIndex = 26;
+            btnStatCPU.Text = "CPU Stats";
+            btnStatCPU.UseVisualStyleBackColor = true;
+            btnStatCPU.Click += btnStatCPU_Click;
+            // 
+            // btnStatMemory
+            // 
+            btnStatMemory.Location = new Point(199, 80);
+            btnStatMemory.Name = "btnStatMemory";
+            btnStatMemory.Size = new Size(178, 48);
+            btnStatMemory.TabIndex = 25;
+            btnStatMemory.Text = "Memory Stats";
+            btnStatMemory.UseVisualStyleBackColor = true;
+            btnStatMemory.Click += btnStatMemory_Click;
+            // 
+            // btnStatTime
+            // 
+            btnStatTime.Location = new Point(15, 80);
+            btnStatTime.Name = "btnStatTime";
+            btnStatTime.Size = new Size(178, 48);
+            btnStatTime.TabIndex = 24;
+            btnStatTime.Text = "Time Stats";
+            btnStatTime.UseVisualStyleBackColor = true;
+            btnStatTime.Click += btnStatTime_Click;
+            // 
+            // btnCheckQuantum
+            // 
+            btnCheckQuantum.Location = new Point(567, 26);
+            btnCheckQuantum.Name = "btnCheckQuantum";
+            btnCheckQuantum.Size = new Size(178, 48);
+            btnCheckQuantum.TabIndex = 23;
+            btnCheckQuantum.Text = "Check Quantum Safety";
+            btnCheckQuantum.UseVisualStyleBackColor = true;
+            btnCheckQuantum.Click += btnCheckQuantum_Click;
             // 
             // btnAnalyzeSecurity
             // 
@@ -373,14 +431,14 @@
             btnViewStats.Name = "btnViewStats";
             btnViewStats.Size = new Size(178, 48);
             btnViewStats.TabIndex = 20;
-            btnViewStats.Text = "View Stats";
+            btnViewStats.Text = "View Encryption Stats";
             btnViewStats.UseVisualStyleBackColor = true;
             btnViewStats.Click += btnViewStats_Click;
             // 
             // btnBack
             // 
             btnBack.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnBack.Location = new Point(819, 706);
+            btnBack.Location = new Point(808, 706);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(178, 48);
             btnBack.TabIndex = 21;
@@ -388,21 +446,11 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
-            // btnCheckQuantum
-            // 
-            btnCheckQuantum.Location = new Point(567, 26);
-            btnCheckQuantum.Name = "btnCheckQuantum";
-            btnCheckQuantum.Size = new Size(178, 48);
-            btnCheckQuantum.TabIndex = 23;
-            btnCheckQuantum.Text = "Check Quantum Safety";
-            btnCheckQuantum.UseVisualStyleBackColor = true;
-            btnCheckQuantum.Click += btnCheckQuantum_Click;
-            // 
             // EncryptForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1021, 783);
+            ClientSize = new Size(1021, 828);
             Controls.Add(btnBack);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
@@ -454,5 +502,9 @@
         private Button btnAnalyzeSecurity;
         private Button btnRunBenchmark;
         private Button btnCheckQuantum;
+        private Button btnStatComplexity;
+        private Button btnStatCPU;
+        private Button btnStatMemory;
+        private Button btnStatTime;
     }
 }

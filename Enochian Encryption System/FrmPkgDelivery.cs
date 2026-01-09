@@ -20,6 +20,8 @@ namespace Enochian_Encryption_System
                 ofd.Filter = "Enochian Encrypted Package (*.enc)|*.enc";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+                    MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
                     Stopwatch sw = Stopwatch.StartNew();
                     try
                     {
@@ -68,6 +70,7 @@ namespace Enochian_Encryption_System
                             GlobalSession.SenderPrivateVector = new int[] { 0, 0, 0 }; // Legacy fallback
 
                         sw.Stop();
+                        probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                         GlobalSession.LogDecTime("Decryption Step 1: Package Delivery", sw.Elapsed.TotalMilliseconds);
 
                         MessageBox.Show($"Package Loaded Successfully!\nReference Tags: {GlobalSession.ReferenceHashList?.Count ?? 0}");

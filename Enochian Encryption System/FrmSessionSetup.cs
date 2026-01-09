@@ -18,6 +18,9 @@ namespace Enochian_Encryption_System
 
         private void btnRandom_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             Random rng = new Random();
 
@@ -51,7 +54,7 @@ namespace Enochian_Encryption_System
             }
             // 2. STOP TIMER
             sw.Stop();
-
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             // 3. LOG TIME TO GLOBAL SESSION
             // Use TotalMilliseconds for high precision
             GlobalSession.LogEncTime("Step 1: Session Setup", sw.Elapsed.TotalMilliseconds);

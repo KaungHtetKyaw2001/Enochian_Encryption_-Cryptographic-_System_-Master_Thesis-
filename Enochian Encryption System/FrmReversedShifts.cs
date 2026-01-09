@@ -65,6 +65,9 @@ namespace Enochian_Encryption_System
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -212,6 +215,7 @@ namespace Enochian_Encryption_System
                 btnConfirm.Enabled = true;
 
                 sw.Stop();
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                 GlobalSession.LogDecTime("Step 7: Reverse Shifts", sw.Elapsed.TotalMilliseconds);
 
                 MessageBox.Show($"Decryption Complete!");

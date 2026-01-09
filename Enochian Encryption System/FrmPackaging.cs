@@ -32,6 +32,9 @@ namespace Enochian_Encryption_System
 
         private void btnAssemble_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
 
             try
@@ -100,6 +103,7 @@ namespace Enochian_Encryption_System
                 GlobalSession.Step14_Done = true;
 
                 sw.Stop();
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                 GlobalSession.LogEncTime("Step 14: Packaging", sw.Elapsed.TotalMilliseconds);
 
                 // Confirm formatting data count

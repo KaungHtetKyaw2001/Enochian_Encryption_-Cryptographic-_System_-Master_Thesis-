@@ -11,6 +11,7 @@ namespace Enochian_Encryption_System
 {
     public partial class FrmCoreEncryption : Form
     {
+
         private int[] _sBox = new int[21];
         private List<int[,]> _sBoxedResult = new List<int[,]>();
         private List<int[,]> _finalCipherResult = new List<int[,]>();
@@ -53,6 +54,8 @@ namespace Enochian_Encryption_System
 
         private void btnSBox_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
             Stopwatch sw = Stopwatch.StartNew();
 
             // 1. Generate S-Box (Fisher-Yates)
@@ -94,18 +97,29 @@ namespace Enochian_Encryption_System
             VisualizeSBoxMatrices(N);
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 11a: S-Box Sub", sw.Elapsed.TotalMilliseconds);
-
+            GlobalSession.Total_Enc_TimeMs += sw.Elapsed.TotalMilliseconds;
+            
             MessageBox.Show($"Stage 1 Complete.\nSubstituted {_sBoxedResult.Count} blocks.");
             btnHillCipher.Enabled = true;
         }
 
         private void btnHillCipher_Click(object sender, EventArgs e)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             int N = GlobalSession.MatrixSize;
             int[,] K = GlobalSession.KeyMatrix;
             _finalCipherResult.Clear();
+
+            // 2. PREPARE MEASUREMENT (Clean Environment)
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            // Create the "Probe" for the cumulative total (System Overhead)
+            MetricProbe probe = new MetricProbe(true);
+
+            // Create a dedicated timer JUST for the Algorithm (Scientific Speed)
+            Stopwatch sw = Stopwatch.StartNew();
 
             // [FIXED] Multiplication now handles large numbers
             foreach (int[,] P in _sBoxedResult)
@@ -116,9 +130,16 @@ namespace Enochian_Encryption_System
 
             VisualizeEncryptedMatrices(N);
 
+            // 2. STOP MEASUREMENT
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
+            long endMem = GC.GetTotalMemory(false);
+            TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
+
+            GlobalSession.Core_Enc_TimeMs += sw.Elapsed.TotalMilliseconds;
             GlobalSession.LogEncTime("Step 11b: Hill Cipher", sw.Elapsed.TotalMilliseconds);
 
+            // [YOUR EXISTING CONFIRMATION]
             btnConfirm.Enabled = true;
             MessageBox.Show($"Encryption Complete!\nTotal Time: {sw.Elapsed.TotalMilliseconds:F4} ms");
         }

@@ -56,6 +56,9 @@ namespace Enochian_Encryption_System
 
         private void btnShuffle_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             _deck.Clear();
             dgvDeck.Rows.Clear();
@@ -107,6 +110,7 @@ namespace Enochian_Encryption_System
                 pos++;
             }
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 13: Deck Creation", sw.Elapsed.TotalMilliseconds);
             btnConfirm.Enabled = true;
 

@@ -22,5 +22,17 @@ namespace Enochian_Encryption_System
         {
             Application.Exit();
         }
+
+        private void btnRSA_Click(object sender, EventArgs e)
+        {
+            FrmRSA rsaForm = new FrmRSA();
+            rsaForm.ShowDialog();
+        }
+
+        private void btnECC_Click(object sender, EventArgs e)
+        {
+            FrmECC ECCForm = new FrmECC();
+            ECCForm.ShowDialog();
+        }
     }
 }

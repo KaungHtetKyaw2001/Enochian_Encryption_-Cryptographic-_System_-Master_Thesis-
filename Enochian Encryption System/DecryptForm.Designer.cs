@@ -39,11 +39,15 @@
             btnSignatureVerification = new Button();
             btnPackageDelivery = new Button();
             groupBox2 = new GroupBox();
+            btnStatComplexity = new Button();
+            btnStatCPU = new Button();
+            btnStatMemory = new Button();
+            btnStatTime = new Button();
+            btnCheckQuantumDecrypt = new Button();
             btnVerifyIntegrity = new Button();
             btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
-            btnCheckQuantumDecrypt = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -158,6 +162,10 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnStatComplexity);
+            groupBox2.Controls.Add(btnStatCPU);
+            groupBox2.Controls.Add(btnStatMemory);
+            groupBox2.Controls.Add(btnStatTime);
             groupBox2.Controls.Add(btnCheckQuantumDecrypt);
             groupBox2.Controls.Add(btnVerifyIntegrity);
             groupBox2.Controls.Add(btnRunBenchmark);
@@ -165,10 +173,60 @@
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox2.Location = new Point(12, 340);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(775, 109);
+            groupBox2.Size = new Size(775, 162);
             groupBox2.TabIndex = 8;
             groupBox2.TabStop = false;
             groupBox2.Text = "View Decryption Stats";
+            // 
+            // btnStatComplexity
+            // 
+            btnStatComplexity.Location = new Point(592, 98);
+            btnStatComplexity.Name = "btnStatComplexity";
+            btnStatComplexity.Size = new Size(166, 48);
+            btnStatComplexity.TabIndex = 31;
+            btnStatComplexity.Text = "Complexity Stats";
+            btnStatComplexity.UseVisualStyleBackColor = true;
+            btnStatComplexity.Click += btnStatComplexity_Click;
+            // 
+            // btnStatCPU
+            // 
+            btnStatCPU.Location = new Point(402, 98);
+            btnStatCPU.Name = "btnStatCPU";
+            btnStatCPU.Size = new Size(166, 48);
+            btnStatCPU.TabIndex = 30;
+            btnStatCPU.Text = "CPU Stats";
+            btnStatCPU.UseVisualStyleBackColor = true;
+            btnStatCPU.Click += btnStatCPU_Click;
+            // 
+            // btnStatMemory
+            // 
+            btnStatMemory.Location = new Point(201, 98);
+            btnStatMemory.Name = "btnStatMemory";
+            btnStatMemory.Size = new Size(178, 48);
+            btnStatMemory.TabIndex = 29;
+            btnStatMemory.Text = "Memory Stats";
+            btnStatMemory.UseVisualStyleBackColor = true;
+            btnStatMemory.Click += btnStatMemory_Click;
+            // 
+            // btnStatTime
+            // 
+            btnStatTime.Location = new Point(5, 98);
+            btnStatTime.Name = "btnStatTime";
+            btnStatTime.Size = new Size(178, 48);
+            btnStatTime.TabIndex = 28;
+            btnStatTime.Text = "Time Stats";
+            btnStatTime.UseVisualStyleBackColor = true;
+            btnStatTime.Click += btnStatTime_Click;
+            // 
+            // btnCheckQuantumDecrypt
+            // 
+            btnCheckQuantumDecrypt.Location = new Point(592, 41);
+            btnCheckQuantumDecrypt.Name = "btnCheckQuantumDecrypt";
+            btnCheckQuantumDecrypt.Size = new Size(166, 51);
+            btnCheckQuantumDecrypt.TabIndex = 3;
+            btnCheckQuantumDecrypt.Text = "Check Quantum Safety";
+            btnCheckQuantumDecrypt.UseVisualStyleBackColor = true;
+            btnCheckQuantumDecrypt.Click += btnCheckQuantumDecrypt_Click;
             // 
             // btnVerifyIntegrity
             // 
@@ -211,21 +269,11 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
-            // btnCheckQuantumDecrypt
-            // 
-            btnCheckQuantumDecrypt.Location = new Point(592, 41);
-            btnCheckQuantumDecrypt.Name = "btnCheckQuantumDecrypt";
-            btnCheckQuantumDecrypt.Size = new Size(166, 51);
-            btnCheckQuantumDecrypt.TabIndex = 3;
-            btnCheckQuantumDecrypt.Text = "Check Quantum Safety";
-            btnCheckQuantumDecrypt.UseVisualStyleBackColor = true;
-            btnCheckQuantumDecrypt.Click += btnCheckQuantumDecrypt_Click;
-            // 
             // DecryptForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(979, 461);
+            ClientSize = new Size(979, 513);
             Controls.Add(btnBack);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -256,5 +304,9 @@
         private Button btnRunBenchmark;
         private Button btnVerifyIntegrity;
         private Button btnCheckQuantumDecrypt;
+        private Button btnStatComplexity;
+        private Button btnStatCPU;
+        private Button btnStatMemory;
+        private Button btnStatTime;
     }
 }

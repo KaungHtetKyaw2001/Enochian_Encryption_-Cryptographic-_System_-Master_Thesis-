@@ -98,6 +98,9 @@ namespace Enochian_Encryption_System
 
         private void btnVerify_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -161,6 +164,7 @@ namespace Enochian_Encryption_System
 
                     MessageBox.Show("Verification Successful! Signature matches Header.");
                     sw.Stop();
+                    probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                     GlobalSession.LogDecTime("Decryption Step 2: Verification", sw.Elapsed.TotalMilliseconds);
                 }
                 else

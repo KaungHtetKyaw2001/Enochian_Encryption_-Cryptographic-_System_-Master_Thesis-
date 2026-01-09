@@ -35,6 +35,8 @@ namespace Enochian_Encryption_System
 
         private void btnGenerateKey_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
             Stopwatch sw = Stopwatch.StartNew();
 
             int seedX, seedY, seedZ;
@@ -104,6 +106,7 @@ namespace Enochian_Encryption_System
             lblGCD.Text = $"GCD(Det, 21) = {gcdValue} (Valid)";
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 9: Key Gen", sw.Elapsed.TotalMilliseconds);
 
             if (gcdValue == 1)

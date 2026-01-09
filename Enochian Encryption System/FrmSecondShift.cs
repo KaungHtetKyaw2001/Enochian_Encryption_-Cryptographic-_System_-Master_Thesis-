@@ -34,6 +34,8 @@ namespace Enochian_Encryption_System
         {
             if (string.IsNullOrEmpty(txtInput.Text)) return;
 
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
             Stopwatch sw = Stopwatch.StartNew();
 
             // 1. Split the mapped output into individual units (e.g., "VEH!", "PA!")
@@ -74,6 +76,7 @@ namespace Enochian_Encryption_System
             txtOutput.Text = sb.ToString().Trim();
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             // Log Time
             GlobalSession.LogEncTime("Step 7: Second Shift", sw.Elapsed.TotalMilliseconds);
 

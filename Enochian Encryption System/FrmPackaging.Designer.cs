@@ -47,7 +47,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(txtSenderID);
             groupBox1.Controls.Add(btnAssemble);
+            groupBox1.Controls.Add(lblSenderID);
             groupBox1.Controls.Add(lblTagCount);
             groupBox1.Controls.Add(lblDeckCount);
             groupBox1.Controls.Add(lblHeader);
@@ -57,14 +59,14 @@
             groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(556, 229);
+            groupBox1.Size = new Size(556, 285);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Payload Assembly";
             // 
             // btnAssemble
             // 
-            btnAssemble.Location = new Point(19, 184);
+            btnAssemble.Location = new Point(19, 241);
             btnAssemble.Name = "btnAssemble";
             btnAssemble.Size = new Size(237, 29);
             btnAssemble.TabIndex = 6;
@@ -158,7 +160,7 @@
             // 
             lblSenderID.AutoSize = true;
             lblSenderID.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblSenderID.Location = new Point(26, 266);
+            lblSenderID.Location = new Point(19, 191);
             lblSenderID.Name = "lblSenderID";
             lblSenderID.Size = new Size(130, 20);
             lblSenderID.TabIndex = 7;
@@ -166,7 +168,7 @@
             // 
             // txtSenderID
             // 
-            txtSenderID.Location = new Point(162, 263);
+            txtSenderID.Location = new Point(150, 188);
             txtSenderID.Name = "txtSenderID";
             txtSenderID.Size = new Size(400, 27);
             txtSenderID.TabIndex = 8;
@@ -176,8 +178,6 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1179, 566);
-            Controls.Add(txtSenderID);
-            Controls.Add(lblSenderID);
             Controls.Add(btnConfirm);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -189,7 +189,6 @@
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion

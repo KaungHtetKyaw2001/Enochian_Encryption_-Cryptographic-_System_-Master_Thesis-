@@ -143,6 +143,37 @@ namespace Enochian_Encryption_System
         public static bool DecStep7_Done { get; set; } = false;
         public static bool DecStep8_Done { get; set; } = false;
         #endregion
+
+        // --- CUMULATIVE ENCRYPTION STATS (Sum of 16 Steps) ---
+        public static double Total_Enc_TimeMs = 0;
+        public static long Total_Enc_MemBytes = 0;
+        public static double Total_Enc_CpuMs = 0;
+        public static string Enc_Complexity = "O(N^3)";
+
+        // 2. CORE ALGORITHM ONLY (Step 16 Speed)
+        public static double Core_Enc_TimeMs = 0;
+        public static double Core_Dec_TimeMs = 0;
+
+        // --- CUMULATIVE DECRYPTION STATS (Sum of 8 Steps) ---
+        public static double Total_Dec_TimeMs = 0;
+        public static long Total_Dec_MemBytes = 0;
+        public static double Total_Dec_CpuMs = 0;
+        public static string Dec_Complexity = "O(N^3)";
+
+        // --- HELPER TO RESET STATS (Call this before Step 1) ---
+        public static void ResetEncryptionMetrics()
+        {
+            Total_Enc_TimeMs = 0;
+            Total_Enc_MemBytes = 0;
+            Total_Enc_CpuMs = 0;
+        }
+
+        public static void ResetDecryptionMetrics()
+        {
+            Total_Dec_TimeMs = 0;
+            Total_Dec_MemBytes = 0;
+            Total_Dec_CpuMs = 0;
+        }
     }
 
     #region Helper Classes

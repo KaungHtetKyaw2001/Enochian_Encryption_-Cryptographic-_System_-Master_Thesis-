@@ -36,6 +36,9 @@ namespace Enochian_Encryption_System
         {
             if (string.IsNullOrEmpty(txtInput.Text)) return;
 
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             // 1. START TIMER
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -63,6 +66,7 @@ namespace Enochian_Encryption_System
 
             // 3. STOP TIMER
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
 
             // Log Time
             GlobalSession.LogEncTime("Step 5: First Shift", sw.Elapsed.TotalMilliseconds);

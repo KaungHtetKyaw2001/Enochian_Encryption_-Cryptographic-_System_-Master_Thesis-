@@ -399,5 +399,36 @@ namespace Enochian_Encryption_System
 
             MessageBox.Show(report, "Quantum Analysis");
         }
+
+        private void btnStatTime_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- ENCRYPTION TIME ---\n\n" +
+                    $"Step: Hill Cipher Matrix Multiplication\n" +
+                    $"Value: {GlobalSession.Core_Enc_TimeMs:F4} ms", "Efficiency Metric");
+        }
+
+        private void btnStatMemory_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- ENCRYPTION MEMORY ---\n\n" +
+                    $"Step: Matrix Allocation\n" +
+                    $"Value: {GlobalSession.Total_Enc_MemBytes} Bytes", "Resource Consumption");
+        }
+
+        private void btnStatCPU_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- ENCRYPTION CPU ---\n\n" +
+                    $"Step: Integer Math Processing\n" +
+                    $"Value: {GlobalSession.Total_Enc_CpuMs:F6} ms", "Power Consumption");
+        }
+
+        private void btnStatComplexity_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"--- ALGORITHMIC COMPLEXITY ---\n\n" +
+                    $"Class: {GlobalSession.Enc_Complexity}\n\n" +
+                    $"Comparison:\n" +
+                    $"RSA: O(k^3) [Exponential]\n" +
+                    $"Enochian: O(N^3) [Polynomial]",
+                    "Big-O Analysis");
+        }
     }
 }

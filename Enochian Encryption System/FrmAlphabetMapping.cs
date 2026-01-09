@@ -36,6 +36,9 @@ namespace Enochian_Encryption_System
         {
             if (string.IsNullOrEmpty(txtInput.Text)) return;
 
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
 
             string input = txtInput.Text.ToUpper();
@@ -75,6 +78,7 @@ namespace Enochian_Encryption_System
             txtOutput.Text = sb.ToString().Trim();
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             // Log Time
             GlobalSession.LogEncTime("Step 6: Alphabet Mapping", sw.Elapsed.TotalMilliseconds);
 

@@ -30,6 +30,9 @@ namespace Enochian_Encryption_System
 
         private void btnReconstruct_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -72,6 +75,7 @@ namespace Enochian_Encryption_System
                     DisplayMatrix(dgvKeyFactorMultipliedMatrix, multipliedMatrix);
 
                     sw.Stop();
+                    probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                     GlobalSession.LogDecTime("Decryption Step 5: Regeneration", sw.Elapsed.TotalMilliseconds);
                     GlobalSession.DecStep5_Done = true;
                     btnConfirm.Enabled = true;

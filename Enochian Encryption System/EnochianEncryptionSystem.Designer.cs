@@ -33,6 +33,9 @@
             label2 = new Label();
             btnDecrypt = new Button();
             btnExit = new Button();
+            label3 = new Label();
+            btnRSA = new Button();
+            btnECC = new Button();
             SuspendLayout();
             // 
             // label1
@@ -64,10 +67,10 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 14F);
-            label2.Location = new Point(35, 137);
+            label2.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label2.Location = new Point(22, 137);
             label2.Name = "label2";
-            label2.Size = new Size(502, 32);
+            label2.Size = new Size(542, 32);
             label2.TabIndex = 2;
             label2.Text = "Select your method: Encryption or Decryption";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -88,7 +91,7 @@
             // 
             btnExit.BackColor = Color.Transparent;
             btnExit.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnExit.Location = new Point(483, 301);
+            btnExit.Location = new Point(483, 486);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(102, 31);
             btnExit.TabIndex = 4;
@@ -96,11 +99,51 @@
             btnExit.UseVisualStyleBackColor = false;
             btnExit.Click += btnExit_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label3.Location = new Point(76, 327);
+            label3.Name = "label3";
+            label3.Size = new Size(427, 32);
+            label3.TabIndex = 5;
+            label3.Text = "Make Comprisons with RSA and ECC";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // btnRSA
+            // 
+            btnRSA.BackColor = Color.DarkGray;
+            btnRSA.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnRSA.ForeColor = SystemColors.ButtonHighlight;
+            btnRSA.Location = new Point(76, 391);
+            btnRSA.Name = "btnRSA";
+            btnRSA.Size = new Size(172, 90);
+            btnRSA.TabIndex = 6;
+            btnRSA.Text = "Run RSA";
+            btnRSA.UseVisualStyleBackColor = false;
+            btnRSA.Click += btnRSA_Click;
+            // 
+            // btnECC
+            // 
+            btnECC.BackColor = Color.DarkGray;
+            btnECC.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnECC.ForeColor = SystemColors.ButtonHighlight;
+            btnECC.Location = new Point(331, 390);
+            btnECC.Name = "btnECC";
+            btnECC.Size = new Size(172, 90);
+            btnECC.TabIndex = 7;
+            btnECC.Text = "Run ECC";
+            btnECC.UseVisualStyleBackColor = false;
+            btnECC.Click += btnECC_Click;
+            // 
             // EnochianEncryptionSystem
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(597, 344);
+            ClientSize = new Size(597, 540);
+            Controls.Add(btnECC);
+            Controls.Add(btnRSA);
+            Controls.Add(label3);
             Controls.Add(btnExit);
             Controls.Add(btnDecrypt);
             Controls.Add(label2);
@@ -119,5 +162,8 @@
         private Label label2;
         private Button btnDecrypt;
         private Button btnExit;
+        private Label label3;
+        private Button btnRSA;
+        private Button btnECC;
     }
 }

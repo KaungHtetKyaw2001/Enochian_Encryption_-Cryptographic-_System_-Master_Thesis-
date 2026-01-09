@@ -86,6 +86,9 @@ namespace Enochian_Encryption_System
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -127,6 +130,7 @@ namespace Enochian_Encryption_System
                         "The S-Box can now be reversed correctly.");
 
                     sw.Stop();
+                    probe.StopAndAccumulate(); // <--- ADD TO TOTAL
                     GlobalSession.LogDecTime("Step 3: Decapsulation", sw.Elapsed.TotalMilliseconds);
                     GlobalSession.DecapsulatedID = decryptedScalar;
                     GlobalSession.DecStep3_Done = true;

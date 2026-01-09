@@ -160,6 +160,9 @@ namespace Enochian_Encryption_System
 
         private void btnSign_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             txtCalcLog.Clear();
 
@@ -220,6 +223,7 @@ namespace Enochian_Encryption_System
             }
 
             sw.Stop();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
             GlobalSession.LogEncTime("Step 15: Dig. Signature", sw.Elapsed.TotalMilliseconds);
             MessageBox.Show($"Trapdoor solved and Public Key Generated!\nTime: {sw.Elapsed.TotalMilliseconds:F4} ms.");
             btnConfirm.Enabled = true;

@@ -11,6 +11,9 @@ namespace Enochian_Encryption_System
 
         private void btnRandomize_Click(object sender, EventArgs e)
         {
+            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Random rng = new Random();
             int[] privateKey = { rng.Next(5, 20), rng.Next(5, 20), rng.Next(5, 20) };
             txtPrivateKey.Text = string.Join(", ", privateKey);
@@ -36,10 +39,13 @@ namespace Enochian_Encryption_System
 
             txtModulo.Text = modulo.ToString();
             txtMultiplier.Text = multiplier.ToString();
+            probe.StopAndAccumulate(); // <--- ADD TO TOTAL
         }
 
         private void BtnCalculate_Click(object sender, EventArgs e)
         {
+            MetricProbe probe = new MetricProbe(true); // <--- START MEASURING
+
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
@@ -59,6 +65,7 @@ namespace Enochian_Encryption_System
                 GlobalSession.ReceiverPrivateVector = privateKey;
                 GlobalSession.ReceiverModulus = modulo;       // <--- CRITICAL FIX
                 GlobalSession.ReceiverMultiplier = multiplier; // <--- CRITICAL FIX
+                probe.StopAndAccumulate(); // <--- ADD TO TOTAL
 
                 GlobalSession.LogEncTime("Receiver Public Key Generation", sw.Elapsed.TotalMilliseconds);
                 MessageBox.Show("Public Key Generated and Saved!", "Success");
