@@ -64,9 +64,7 @@ namespace Enochian_Encryption_System
         public static int KeyDeterminant { get; set; }
         public static List<int[,]> SBoxedMatrices { get; set; }
 
-        // [FIX] Added the missing property here
         public static List<int[,]> CipherMatrixList { get; set; }
-
         public static List<int[,]> EncryptedMatrices { get; set; }
         #endregion
 
@@ -83,11 +81,10 @@ namespace Enochian_Encryption_System
         #region 6. Decryption State
         public static int DecapsulatedID { get; set; }
         public static int HeaderID { get; set; }
-        // Store final decrypted string
         public static string DecryptedText { get; set; }
         #endregion
 
-        #region 7. Timing Metrics (Fixed Methods)
+        #region 7. Timing Metrics
         public static Dictionary<string, double> EncryptionTimes { get; set; } = new Dictionary<string, double>();
         public static Dictionary<string, double> DecryptionTimes { get; set; } = new Dictionary<string, double>();
 
@@ -114,7 +111,7 @@ namespace Enochian_Encryption_System
         }
         #endregion
 
-        #region 8. Progress Flags (Fixed ReceiverKeyLoaded)
+        #region 8. Progress Flags
         public static bool ReceiverKeyLoaded { get; set; } = false;
 
         public static bool Step1_Done { get; set; } = false;
@@ -144,28 +141,35 @@ namespace Enochian_Encryption_System
         public static bool DecStep8_Done { get; set; } = false;
         #endregion
 
-        // --- CUMULATIVE ENCRYPTION STATS (Sum of 16 Steps) ---
+        #region 9. Benchmark Cache (FIXED: Using Dynamic)
+        // [FIX] Using 'dynamic' prevents the accessibility error (CS0053)
+        // This allows the code to work even if Benchmark.BenchResult is internal.
+        public static dynamic SavedEncBenchmarks { get; set; } = null;
+        public static dynamic SavedDecBenchmarks { get; set; } = null;
+        #endregion
+
+        // --- CUMULATIVE ENCRYPTION STATS ---
         public static double Total_Enc_TimeMs = 0;
         public static long Total_Enc_MemBytes = 0;
         public static double Total_Enc_CpuMs = 0;
         public static string Enc_Complexity = "O(N^3)";
 
-        // 2. CORE ALGORITHM ONLY (Step 16 Speed)
+        // 2. CORE ALGORITHM ONLY
         public static double Core_Enc_TimeMs = 0;
         public static double Core_Dec_TimeMs = 0;
 
-        // --- CUMULATIVE DECRYPTION STATS (Sum of 8 Steps) ---
+        // --- CUMULATIVE DECRYPTION STATS ---
         public static double Total_Dec_TimeMs = 0;
         public static long Total_Dec_MemBytes = 0;
         public static double Total_Dec_CpuMs = 0;
         public static string Dec_Complexity = "O(N^3)";
 
-        // --- HELPER TO RESET STATS (Call this before Step 1) ---
         public static void ResetEncryptionMetrics()
         {
             Total_Enc_TimeMs = 0;
             Total_Enc_MemBytes = 0;
             Total_Enc_CpuMs = 0;
+            SavedEncBenchmarks = null; // Reset cache
         }
 
         public static void ResetDecryptionMetrics()
@@ -173,6 +177,7 @@ namespace Enochian_Encryption_System
             Total_Dec_TimeMs = 0;
             Total_Dec_MemBytes = 0;
             Total_Dec_CpuMs = 0;
+            SavedDecBenchmarks = null; // Reset cache
         }
     }
 
