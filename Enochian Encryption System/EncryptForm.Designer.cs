@@ -63,6 +63,7 @@
             btnRunBenchmark = new Button();
             btnViewStats = new Button();
             btnBack = new Button();
+            btnNIST = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -437,20 +438,33 @@
             // 
             // btnBack
             // 
+            btnBack.BackColor = Color.IndianRed;
             btnBack.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnBack.Location = new Point(808, 706);
+            btnBack.Location = new Point(799, 760);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(178, 48);
             btnBack.TabIndex = 21;
             btnBack.Text = "Back";
-            btnBack.UseVisualStyleBackColor = true;
+            btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
+            // 
+            // btnNIST
+            // 
+            btnNIST.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnNIST.Location = new Point(799, 706);
+            btnNIST.Name = "btnNIST";
+            btnNIST.Size = new Size(178, 48);
+            btnNIST.TabIndex = 22;
+            btnNIST.Text = "Run NIST Benchmark";
+            btnNIST.UseVisualStyleBackColor = true;
+            btnNIST.Click += btnNIST_Click;
             // 
             // EncryptForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1021, 828);
+            Controls.Add(btnNIST);
             Controls.Add(btnBack);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
@@ -506,5 +520,6 @@
         private Button btnStatCPU;
         private Button btnStatMemory;
         private Button btnStatTime;
+        private Button btnNIST;
     }
 }
