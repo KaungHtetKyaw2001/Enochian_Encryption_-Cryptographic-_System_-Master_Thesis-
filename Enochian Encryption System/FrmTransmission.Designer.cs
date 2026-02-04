@@ -220,7 +220,7 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Name = "FrmTransmission";
-            Text = "FrmTransmission";
+            Text = "Transmission";
             Load += FrmTransmission_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

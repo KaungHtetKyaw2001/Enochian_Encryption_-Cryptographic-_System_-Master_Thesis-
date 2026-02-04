@@ -20,7 +20,9 @@ namespace Enochian_Encryption_System
 
         private void FrmDecapsulation_Load(object sender, EventArgs e)
         {
-            if (!GlobalSession.DecStep2_Done) {
+            // --- STANDARD CHECKS ---
+            if (!GlobalSession.DecStep2_Done)
+            {
                 MessageBox.Show("Sequence Error: Step 2 (Signature Verification) is not complete.", "Access Denied");
                 this.Close();
                 return;
@@ -31,42 +33,37 @@ namespace Enochian_Encryption_System
                 encryptedPackageID = GlobalSession.FinalPayload.TargetHashID;
             if (encryptedPackageID == 0) encryptedPackageID = 21;
 
-            // [CRITICAL FIX] RESTORE STATE FROM PAYLOAD
+            // --- RESTORE STATE ---
             if (GlobalSession.FinalPayload != null)
             {
-                // 1. Load Receiver Keys
                 _receiverModulo = GlobalSession.FinalPayload.ReceiverModulus;
                 _receiverMultiplier = GlobalSession.FinalPayload.ReceiverMultiplier;
                 _receiverPrivateKey = GlobalSession.FinalPayload.ReceiverPrivateVector;
 
-                // 2. [NEW] Load Lorentz Seeds (REQUIRED FOR S-BOX & SHUFFLE)
                 GlobalSession.LorentzInt1 = GlobalSession.FinalPayload.LorentzInt1;
-                GlobalSession.LorentzInt2 = GlobalSession.FinalPayload.LorentzInt2; // <--- The S-Box Seed
-                GlobalSession.LorentzInt3 = GlobalSession.FinalPayload.LorentzInt3; // <--- The Integrity Salt
-
-                // 3. [NEW] Load Matrix Configuration
+                GlobalSession.LorentzInt2 = GlobalSession.FinalPayload.LorentzInt2;
+                GlobalSession.LorentzInt3 = GlobalSession.FinalPayload.LorentzInt3;
                 GlobalSession.MatrixSize = GlobalSession.FinalPayload.MatrixSize;
                 GlobalSession.LorentzIterations = GlobalSession.FinalPayload.IterationCount;
-
-                // 4. [NEW] Load Sender Keys (For Signature Verification)
                 GlobalSession.SenderPublicVector = GlobalSession.FinalPayload.SenderPublicVector;
                 GlobalSession.SenderModulus = GlobalSession.FinalPayload.SenderModulus;
                 GlobalSession.SenderMultiplier = GlobalSession.FinalPayload.SenderMultiplier;
             }
             else
             {
-                // Fallback (for same-session testing)
                 _receiverModulo = GlobalSession.ReceiverModulus;
                 _receiverMultiplier = GlobalSession.ReceiverMultiplier;
                 _receiverPrivateKey = GlobalSession.ReceiverPrivateVector;
             }
 
-            // Fallback to prevent crash
             if (_receiverModulo == 0) _receiverModulo = 29;
             if (_receiverPrivateKey == null) _receiverPrivateKey = new int[] { 3, 5, 10 };
 
+            // --- [RESTORED] NO SCARY WARNINGS, JUST UI SETUP ---
             txtEncHeader.Text = encryptedPackageID.ToString();
-            txtPrivKey.Text = $"n = {_receiverMultiplier}";
+
+            // I kept the UI fix (showing the vector) because that is helpful, but removed the logic checks.
+            txtPrivKey.Text = "[" + string.Join(", ", _receiverPrivateKey) + "]";
             txtModulo.Text = $"M = {_receiverModulo}";
             txtMultiplier.Text = _receiverMultiplier.ToString();
 
@@ -86,15 +83,15 @@ namespace Enochian_Encryption_System
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            GlobalSession.ResetEncryptionMetrics(); // <--- RESET BUCKETS
-            MetricProbe probe = new MetricProbe(false); // <--- START MEASURING
+            GlobalSession.ResetEncryptionMetrics();
+            MetricProbe probe = new MetricProbe(false);
 
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
                 // 1. Inverse
                 int inverseMultiplier = ModInverse(_receiverMultiplier, _receiverModulo);
-                if (inverseMultiplier == -1) inverseMultiplier = 1;
+                if (inverseMultiplier == -1) inverseMultiplier = 1; // Safety fallback
 
                 lblInverse.Text = $"Inverse (n^-1): {inverseMultiplier}";
                 lblCalcs.Text = $"Calculating: Inv({_receiverMultiplier}, {_receiverModulo}) = {inverseMultiplier}";
@@ -107,15 +104,25 @@ namespace Enochian_Encryption_System
 
                 lblFormula.Text = $"({encryptedVal} * {inverseMultiplier}) % {_receiverModulo} = {decryptedScalar}";
 
-                // 3. Solve Vector
+                // 3. Solve Vector (RESTORED ORIGINAL RECURSIVE LOGIC)
                 int[] recoveredVector = SolveKnapsackVector(decryptedScalar, _receiverPrivateKey);
+
+                // Safety: If recursive solver fails (rare), return error
+                if (recoveredVector == null)
+                {
+                    sw.Stop();
+                    lblStatus.Text = "FAILED";
+                    lblStatus.BackColor = Color.Red;
+                    MessageBox.Show("Decryption Failed: Recursive solver could not match the target sum.");
+                    return;
+                }
+
                 string recoveredVecStr = "[" + string.Join(", ", recoveredVector) + "]";
                 lblResultVector.Text = recoveredVecStr;
 
                 // 4. Compare
                 string originalVecStr = lblOriginalSessionVector.Text;
                 bool isMatch = (recoveredVecStr.Replace(" ", "") == originalVecStr.Replace(" ", ""));
-
 
                 if (isMatch)
                 {
@@ -130,7 +137,7 @@ namespace Enochian_Encryption_System
                         "The S-Box can now be reversed correctly.");
 
                     sw.Stop();
-                    probe.StopAndAccumulate(); // <--- ADD TO TOTAL
+                    probe.StopAndAccumulate();
                     GlobalSession.LogDecTime("Step 3: Decapsulation", sw.Elapsed.TotalMilliseconds);
                     GlobalSession.DecapsulatedID = decryptedScalar;
                     GlobalSession.DecStep3_Done = true;
@@ -143,28 +150,47 @@ namespace Enochian_Encryption_System
                     lblComparison.ForeColor = Color.Red;
                     lblStatus.Text = "FAILED";
                     lblStatus.BackColor = Color.Red;
-                    MessageBox.Show($"Critical Error: Mismatch.\nKey used: [{string.Join(",", _receiverPrivateKey)}]\nModulo used: {_receiverModulo}");
+                    // I added specific debug info here so you can see WHY it mismatched if it happens again
+                    MessageBox.Show($"Mismatch Details:\nTarget: {decryptedScalar}\nRecovered: {recoveredVecStr}\nOriginal: {originalVecStr}");
                 }
             }
             catch (Exception ex) { sw.Stop(); MessageBox.Show("Error: " + ex.Message); }
         }
 
-        // --- HELPERS ---
+        // --- RESTORED ORIGINAL HELPERS (RECURSIVE) ---
+
         private int[] SolveKnapsackVector(int target, int[] privateKey)
         {
             int[] resultVector = new int[privateKey.Length];
+            // RESTORED: Using FindSubsetSum (Recursive) instead of Greedy Loop
             List<int> usedValues = FindSubsetSum(privateKey, target);
+
             if (usedValues != null)
             {
+                // Safety logic for duplicates
+                List<int> tempConsumption = new List<int>(usedValues);
+
                 for (int i = 0; i < privateKey.Length; i++)
                 {
-                    if (usedValues.Contains(privateKey[i])) { resultVector[i] = 1; usedValues.Remove(privateKey[i]); }
-                    else resultVector[i] = 0;
+                    if (tempConsumption.Contains(privateKey[i]))
+                    {
+                        resultVector[i] = 1;
+                        tempConsumption.Remove(privateKey[i]);
+                    }
+                    else
+                    {
+                        resultVector[i] = 0;
+                    }
                 }
+            }
+            else
+            {
+                return null; // Return null if solver fails
             }
             return resultVector;
         }
 
+        // RESTORED: The original recursive backtracking method
         private List<int> FindSubsetSum(int[] numbers, int target)
         {
             List<int> result = new List<int>();
@@ -172,14 +198,20 @@ namespace Enochian_Encryption_System
             return null;
         }
 
+        // RESTORED: The original recursive solver
         private bool Solve(int[] numbers, int target, int index, List<int> current)
         {
             if (target == 0) return true;
             if (target < 0 || index >= numbers.Length) return false;
+
+            // Include current
             current.Add(numbers[index]);
             if (Solve(numbers, target - numbers[index], index + 1, current)) return true;
+
+            // Exclude current (Backtrack)
             current.RemoveAt(current.Count - 1);
             if (Solve(numbers, target, index + 1, current)) return true;
+
             return false;
         }
 
@@ -191,5 +223,7 @@ namespace Enochian_Encryption_System
         }
 
         private void btnConfirm_Click(object sender, EventArgs e) { this.Close(); }
+
+        // Removed ValidateKeyHealth entirely to ensure no more warnings.
     }
 }
