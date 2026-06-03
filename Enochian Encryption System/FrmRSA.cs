@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Collections.Generic;
 
 namespace Enochian_Encryption_System
 {
@@ -33,16 +33,19 @@ namespace Enochian_Encryption_System
             rtbPlainOutput.Clear();
             Application.DoEvents();
 
+            // Prepare Input
+            byte[] dataToEncrypt = Encoding.UTF8.GetBytes(rtbPlainInput.Text);
+            double dataSizeKB = (double)dataToEncrypt.Length / 1024.0;
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
             long startMem = GC.GetTotalMemory(true);
-            TimeSpan startCpu = Process.GetCurrentProcess().TotalProcessorTime;
+
+            // 1. START TIMER
             Stopwatch sw = Stopwatch.StartNew();
 
             try
             {
-                byte[] dataToEncrypt = Encoding.UTF8.GetBytes(rtbPlainInput.Text);
-
                 // Block Chaining Logic
                 int maxBlockSize = (_currentKeySize / 8) - 42;
                 List<byte> finalEncryptedData = new List<byte>();
@@ -57,33 +60,28 @@ namespace Enochian_Encryption_System
 
                 _lastEncryptedBytes = finalEncryptedData.ToArray();
 
+                // 2. STOP TIMER
                 sw.Stop();
                 long endMem = GC.GetTotalMemory(false);
-                TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
 
                 // --- DYNAMIC CALCULATIONS ---
                 double timeMs = sw.Elapsed.TotalMilliseconds;
                 double entropy = CalculateEntropy(_lastEncryptedBytes);
-                double dataSizeKB = (double)dataToEncrypt.Length / 1024.0;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
-                double cpuMs = (endCpu - startCpu).TotalMilliseconds;
 
-                // Dynamic Quantum Verdict
                 string quantumVerdict = GetDynamicQuantumVerdict(_currentKeySize);
 
                 rtbPlainOutput.Text = Convert.ToBase64String(_lastEncryptedBytes);
                 rtbCipherInput.Text = rtbPlainOutput.Text;
 
-                string stats = $"--- PERFORMANCE ---\n" +
+                string stats = $"--- PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
                                $"Throughput: {speedKBps:F4} KB/s\n" +
                                $"Memory: {Math.Max(0, endMem - startMem)} Bytes\n" +
-                               $"CPU: {(cpuMs == 0 ? "< 1 ms" : $"{cpuMs:F4} ms")}\n" +
-                               $"Complexity: O(N^3) [Exponential]\n\n" +
+                               $"Complexity: O(N^3)\n\n" +
                                $"--- SECURITY & QUANTUM ---\n" +
                                $"Entropy: {entropy:F4} bits/byte\n" +
                                $"Key Size: {_currentKeySize}-bit\n" +
-                               $"Qubits Needed: ~{_currentKeySize * 2} Logical\n" +
                                $"Quantum Status: {quantumVerdict}";
 
                 rtbEncStats.Text = stats;
@@ -105,7 +103,6 @@ namespace Enochian_Encryption_System
             GC.Collect();
 
             long startMem = GC.GetTotalMemory(true);
-            TimeSpan startCpu = Process.GetCurrentProcess().TotalProcessorTime;
             Stopwatch sw = Stopwatch.StartNew();
 
             try
@@ -120,12 +117,7 @@ namespace Enochian_Encryption_System
                 int blockSize = _currentKeySize / 8;
                 List<byte> finalDecryptedData = new List<byte>();
 
-                if (dataToDecrypt.Length % blockSize != 0)
-                {
-                    MessageBox.Show("Corrupt Data: Length mismatch.");
-                    return;
-                }
-
+                // Measurement wraps only the decryption loop
                 for (int i = 0; i < dataToDecrypt.Length; i += blockSize)
                 {
                     byte[] chunk = new byte[blockSize];
@@ -133,30 +125,21 @@ namespace Enochian_Encryption_System
                     finalDecryptedData.AddRange(_rsa.Decrypt(chunk, true));
                 }
 
-                byte[] fullDecryptedBytes = finalDecryptedData.ToArray();
-
                 sw.Stop();
                 long endMem = GC.GetTotalMemory(false);
-                TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
-
+                byte[] fullDecryptedBytes = finalDecryptedData.ToArray();
                 rtbCipherOutput.Text = Encoding.UTF8.GetString(fullDecryptedBytes);
 
                 double timeMs = sw.Elapsed.TotalMilliseconds;
-                double cpuMs = (endCpu - startCpu).TotalMilliseconds;
-                double entropy = CalculateEntropy(fullDecryptedBytes);
                 double dataSizeKB = (double)fullDecryptedBytes.Length / 1024.0;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
 
-                string quantumVerdict = GetDynamicQuantumVerdict(_currentKeySize);
-
-                string stats = $"--- DECRYPTION PERFORMANCE ---\n" +
+                string stats = $"--- DECRYPTION PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
                                $"Throughput: {speedKBps:F4} KB/s\n" +
-                               $"Memory: {Math.Max(0, endMem - startMem)} Bytes\n" +
-                               $"CPU: {(cpuMs == 0 ? "< 1 ms" : $"{cpuMs:F4} ms")}\n\n" +
-                               $"--- SECURITY & QUANTUM ---\n" +
-                               $"Restored Entropy: {entropy:F4} bits/byte\n" +
-                               $"Quantum Status: {quantumVerdict}";
+                               $"Memory: {Math.Max(0, endMem - startMem)} Bytes\n\n" +
+                               $"--- SECURITY ---\n" +
+                               $"Restored Entropy: {CalculateEntropy(fullDecryptedBytes):F4} bits/byte";
 
                 rtbDecStats.Text = stats;
             }
@@ -176,19 +159,9 @@ namespace Enochian_Encryption_System
 
         private string GetDynamicQuantumVerdict(int keyBits)
         {
-            // Logic based on Shor's Algorithm (2N Qubits)
-            if (keyBits < 2048)
-            {
-                return "CRITICALLY WEAK (Factoring Trivial)";
-            }
-            else if (keyBits == 2048)
-            {
-                return "VULNERABLE (Standard Threat)";
-            }
-            else if (keyBits >= 4096)
-            {
-                return "RESISTANT (High Qubit Cost)";
-            }
+            if (keyBits < 2048) return "CRITICALLY WEAK (Factoring Trivial)";
+            else if (keyBits == 2048) return "VULNERABLE (Standard Threat)";
+            else if (keyBits >= 4096) return "RESISTANT (High Qubit Cost)";
             return "UNKNOWN";
         }
     }

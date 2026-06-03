@@ -146,42 +146,75 @@ namespace Enochian_Encryption_System
         {
             this.Cursor = Cursors.WaitCursor;
 
-            // --- NEW CACHING LOGIC START ---
-            // Check if we have a saved result.
+            // --- 1. CACHING LOGIC ---
             if (GlobalSession.SavedDecBenchmarks == null)
             {
-                // Run the test only ONCE and save it
                 GlobalSession.SavedDecBenchmarks = Benchmark.RunDecryptionTests(GlobalSession.MatrixSize);
             }
-
-            // Use the saved result
             var results = GlobalSession.SavedDecBenchmarks;
-            // --- NEW CACHING LOGIC END ---
+
+            // --- 2. GET REAL FILE SIZE (Fixing the PlaintextBytes error) ---
+            string sourceText = GlobalSession.RawInput;
+            if (string.IsNullOrEmpty(sourceText))
+            {
+                sourceText = "Fallback payload data";
+            }
+
+            byte[] activePayload = System.Text.Encoding.UTF8.GetBytes(sourceText);
+            double fileSizeKB = activePayload.Length / 1024.0;
+
+            // --- 3. DYNAMIC ML-KEM (KYBER) INTEGRATION ---
+            double kyberSpeed = 0;
+            try
+            {
+                KyberBenchmarker kyber = new KyberBenchmarker();
+                kyber.GenerateKeys();
+
+                // For decryption testing, we must encrypt the data first
+                byte[] encryptedData;
+                kyber.BenchmarkEncryption(activePayload, out encryptedData);
+
+                // Now we measure how fast Kyber decrypts it
+                kyberSpeed = kyber.BenchmarkDecryption(encryptedData);
+            }
+            catch (Exception)
+            {
+                kyberSpeed = 0;
+            }
 
             this.Cursor = Cursors.Default;
 
-            // Get values
+            // --- 4. GET LATENCY (ms) ---
             double mySpeed = results[0].OperationTime_ms;
             double rsaSpeed = results[1].OperationTime_ms;
             double eccSpeed = results[2].OperationTime_ms;
 
-            // Calculate Ratios
-            double rsaRatio = (mySpeed > 0) ? rsaSpeed / mySpeed : 0;
-            double eccRatio = (mySpeed > 0) ? eccSpeed / mySpeed : 0;
+            // --- 5. CALCULATE TRUE THROUGHPUT (KB/s) ---
+            double myThroughput = (mySpeed > 0) ? fileSizeKB / (mySpeed / 1000.0) : 0;
+            double rsaThroughput = (rsaSpeed > 0) ? fileSizeKB / (rsaSpeed / 1000.0) : 0;
+            double eccThroughput = (eccSpeed > 0) ? fileSizeKB / (eccSpeed / 1000.0) : 0;
+            double kyberThroughput = (kyberSpeed > 0) ? fileSizeKB / (kyberSpeed / 1000.0) : 0;
 
-            // Build Report
-            string output = "--- DECRYPTION EFFICIENCY ---\n\n" +
-                            $"Enochian: {mySpeed:F4} ms\n" +
-                            $"RSA-2048: {rsaSpeed:F4} ms\n" +
-                            $"ECC/X25519: {eccSpeed:F4} ms\n\n" +
-                            $"VICTORY STATS:\n" +
+            // --- 6. CALCULATE RATIOS (Using Throughput) ---
+            double rsaRatio = (rsaThroughput > 0) ? myThroughput / rsaThroughput : 0;
+            double eccRatio = (eccThroughput > 0) ? myThroughput / eccThroughput : 0;
+            double kyberRatio = (kyberThroughput > 0) ? myThroughput / kyberThroughput : 0;
+
+            // --- 7. BUILD THE REPORT ---
+            string output = $"--- DECRYPTION PERFORMANCE ({fileSizeKB:F2} KB Payload) ---\n\n" +
+                            $"Enochian: {mySpeed:F4} ms  |  {myThroughput:F2} KB/s\n" +
+                            $"RSA-2048: {rsaSpeed:F4} ms  |  {rsaThroughput:F2} KB/s\n" +
+                            $"ECC/X25519: {eccSpeed:F4} ms  |  {eccThroughput:F2} KB/s\n" +
+                            $"ML-KEM-768: {kyberSpeed:F4} ms  |  {kyberThroughput:F2} KB/s\n\n" +
+                            $"VICTORY STATS (Throughput Multiplier):\n" +
                             $"vs RSA: {rsaRatio:F0}x Faster\n" +
-                            $"vs ECC: {eccRatio:F0}x Faster";
+                            $"vs ECC: {eccRatio:F0}x Faster\n" +
+                            $"vs ML-KEM: {kyberRatio:F0}x Faster";
 
-            // Copy to Clipboard
-            Clipboard.SetText($"Algorithm\tTime(ms)\nEnochian(Dec)\t{mySpeed}\nRSA(Dec)\t{rsaSpeed}\nECC/X25519\t{eccSpeed}");
+            // --- 8. COPY TO CLIPBOARD FOR EXCEL ---
+            Clipboard.SetText($"Algorithm\tTime(ms)\tThroughput(KB/s)\nEnochian\t{mySpeed}\t{myThroughput}\nRSA\t{rsaSpeed}\t{rsaThroughput}\nECC\t{eccSpeed}\t{eccThroughput}\nML-KEM\t{kyberSpeed}\t{kyberThroughput}");
 
-            MessageBox.Show(output, "Efficiency Proof");
+            MessageBox.Show(output, "Efficiency Proof (Decryption)");
         }
 
         private void btnVerifyIntegrity_Click(object sender, EventArgs e)

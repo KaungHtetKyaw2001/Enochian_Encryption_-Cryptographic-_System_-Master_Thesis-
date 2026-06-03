@@ -21,26 +21,27 @@ namespace Enochian_Encryption_System
             {
                 byte[] fileBytesToTest;
 
-                // 1. DYNAMIC FILE UPLOAD (Prevents UI freezing on massive datasets)
+                // 1. DYNAMIC FILE UPLOAD 
                 using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
                     openFileDialog.Title = "Select Dataset for ML-KEM Benchmark";
                     openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 
-                    // If the user clicks "Cancel" on the file picker, stop the process
                     if (openFileDialog.ShowDialog() != DialogResult.OK)
                     {
                         return;
                     }
-
-                    // Read the selected file directly into memory
                     fileBytesToTest = File.ReadAllBytes(openFileDialog.FileName);
                 }
+
+                // --- AUTOMATIC FILE SIZE CALCULATION ---
+                // We get the raw bytes, then divide by 1024 to get the exact Kilobytes
+                double fileSizeKB = fileBytesToTest.Length / 1024.0;
 
                 // 2. INITIALIZE LOGGING
                 txtProcessLog.Clear();
                 txtProcessLog.AppendText(">> INITIALIZING NIST FIPS-203 ML-KEM BENCHMARK...\r\n");
-                txtProcessLog.AppendText($">> [Target Payload Loaded]: {fileBytesToTest.Length} bytes.\r\n");
+                txtProcessLog.AppendText($">> [Target Payload Loaded]: {fileBytesToTest.Length} bytes ({fileSizeKB:F2} KB).\r\n\r\n");
 
                 // 3. GENERATE KEYS
                 KyberBenchmarker kyber = new KyberBenchmarker();
@@ -53,18 +54,34 @@ namespace Enochian_Encryption_System
 
                 byte[] encryptedData;
                 double encTime = kyber.BenchmarkEncryption(fileBytesToTest, out encryptedData);
-                txtProcessLog.AppendText($">> ENCRYPTION COMPLETE. Latency: {encTime} ms.\r\n\r\n");
+
+                // --- CALCULATE ENCRYPTION THROUGHPUT ---
+                double encSeconds = encTime / 1000.0;
+                double encSpeedKB = (encSeconds > 0) ? (fileSizeKB / encSeconds) : 0;
+                double encSpeedMB = encSpeedKB / 1024.0;
+
+                txtProcessLog.AppendText($">> ENCRYPTION COMPLETE.\r\n");
+                txtProcessLog.AppendText($"   - Latency: {encTime:F4} ms\r\n");
+                txtProcessLog.AppendText($"   - Speed:   {encSpeedKB:F2} KB/s ({encSpeedMB:F2} MB/s)\r\n\r\n");
 
                 // 5. DECRYPT
                 txtProcessLog.AppendText(">> [KEM]: Decapsulating Secret using ML-KEM Private Key...\r\n");
                 txtProcessLog.AppendText(">> [AES]: Decrypting payload with restored Secret...\r\n");
 
                 double decTime = kyber.BenchmarkDecryption(encryptedData);
-                txtProcessLog.AppendText($">> DECRYPTION COMPLETE. Latency: {decTime} ms.\r\n");
+
+                // --- CALCULATE DECRYPTION THROUGHPUT ---
+                double decSeconds = decTime / 1000.0;
+                double decSpeedKB = (decSeconds > 0) ? (fileSizeKB / decSeconds) : 0;
+                double decSpeedMB = decSpeedKB / 1024.0;
+
+                txtProcessLog.AppendText($">> DECRYPTION COMPLETE.\r\n");
+                txtProcessLog.AppendText($"   - Latency: {decTime:F4} ms\r\n");
+                txtProcessLog.AppendText($"   - Speed:   {decSpeedKB:F2} KB/s ({decSpeedMB:F2} MB/s)\r\n\r\n");
 
                 // 6. Update the UI Labels
-                lblKyberEncTime.Text = $"Kyber Enc: {encTime} ms";
-                lblKyberDecTime.Text = $"Kyber Dec: {decTime} ms";
+                lblKyberEncTime.Text = $"Kyber Enc: {encTime:F4} ms | {encSpeedKB:F2} KB/s";
+                lblKyberDecTime.Text = $"Kyber Dec: {decTime:F4} ms | {decSpeedKB:F2} KB/s";
 
             }
             catch (Exception ex)

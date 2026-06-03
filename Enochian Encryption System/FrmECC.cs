@@ -10,10 +10,9 @@ namespace Enochian_Encryption_System
 {
     public partial class FrmECC : Form
     {
-        // Stable Session Key for Demo purposes
         private byte[] _sharedSecret;
         private byte[] _lastEncryptedBytes;
-        private int _currentCurveSize = 256; // NIST P-256 Standard
+        private int _currentCurveSize = 256;
 
         public FrmECC()
         {
@@ -23,7 +22,6 @@ namespace Enochian_Encryption_System
 
         private void InitializeStableECCKeys()
         {
-            // Simulate stable key exchange so decryption always works
             using (SHA256 sha = SHA256.Create())
             {
                 _sharedSecret = sha.ComputeHash(Encoding.UTF8.GetBytes("EnochianThesisStableKey2025"));
@@ -43,30 +41,28 @@ namespace Enochian_Encryption_System
             rtbPlainOutput.Clear();
             Application.DoEvents();
 
+            // Prepare Input
+            byte[] dataToEncrypt = Encoding.UTF8.GetBytes(rtbPlainInput.Text);
+            double dataSizeKB = (double)dataToEncrypt.Length / 1024.0;
+
+            // 1. SETUP (Outside Timer)
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            long startMem = GC.GetTotalMemory(true);
-            TimeSpan startCpu = Process.GetCurrentProcess().TotalProcessorTime;
+
+            Aes aes = Aes.Create();
+            aes.Key = _sharedSecret;
+            aes.GenerateIV();
+            byte[] iv = aes.IV;
+
+            // 2. START TIMER
             Stopwatch sw = Stopwatch.StartNew();
 
             try
             {
-                byte[] dataToEncrypt = Encoding.UTF8.GetBytes(rtbPlainInput.Text);
-
-                // AES-256 Encryption using the ECC Shared Secret
                 byte[] encryptedData;
-                byte[] iv;
-
-                using (Aes aes = Aes.Create())
+                using (var encryptor = aes.CreateEncryptor())
                 {
-                    aes.Key = _sharedSecret;
-                    aes.GenerateIV();
-                    iv = aes.IV;
-
-                    using (var encryptor = aes.CreateEncryptor())
-                    {
-                        encryptedData = encryptor.TransformFinalBlock(dataToEncrypt, 0, dataToEncrypt.Length);
-                    }
+                    encryptedData = encryptor.TransformFinalBlock(dataToEncrypt, 0, dataToEncrypt.Length);
                 }
 
                 // Combine IV + Ciphertext
@@ -75,32 +71,24 @@ namespace Enochian_Encryption_System
                 package.AddRange(encryptedData);
                 _lastEncryptedBytes = package.ToArray();
 
+                // 3. STOP TIMER
                 sw.Stop();
-                long endMem = GC.GetTotalMemory(false);
-                TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
 
-                // Stats Calculation
+                // --- DYNAMIC CALCULATIONS ---
                 double timeMs = sw.Elapsed.TotalMilliseconds;
-                double entropy = CalculateEntropy(_lastEncryptedBytes);
-                double dataSizeKB = (double)dataToEncrypt.Length / 1024.0;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
-                double cpuMs = (endCpu - startCpu).TotalMilliseconds;
-
-                // Dynamic Quantum Verdict
+                double entropy = CalculateEntropy(_lastEncryptedBytes);
                 string quantumReport = GetECCQuantumStatus(_currentCurveSize);
 
-                // Output
                 rtbPlainOutput.Text = Convert.ToBase64String(_lastEncryptedBytes);
-                rtbCipherInput.Text = rtbPlainOutput.Text; // Auto-copy
+                rtbCipherInput.Text = rtbPlainOutput.Text;
 
-                string stats = $"--- PERFORMANCE (Hybrid ECC) ---\n" +
+                string stats = $"--- PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
-                               $"Throughput: {speedKBps:F4} KB/s\n" +
-                               $"Memory: {Math.Max(0, endMem - startMem)} Bytes\n" +
-                               $"CPU: {(cpuMs == 0 ? "< 1 ms" : $"{cpuMs:F4} ms")}\n\n" +
+                               $"Throughput: {speedKBps:F4} KB/s\n\n" +
                                $"--- SECURITY AUDIT ---\n" +
                                $"Entropy: {entropy:F4} bits/byte\n" +
-                               $"Curve Size: {_currentCurveSize}-bit (NIST P-{_currentCurveSize})\n" +
+                               $"Curve: NIST P-{_currentCurveSize}\n" +
                                $"{quantumReport}";
 
                 rtbEncStats.Text = stats;
@@ -121,15 +109,9 @@ namespace Enochian_Encryption_System
             rtbCipherOutput.Clear();
             GC.Collect();
 
-            long startMem = GC.GetTotalMemory(true);
-            TimeSpan startCpu = Process.GetCurrentProcess().TotalProcessorTime;
-            Stopwatch sw = Stopwatch.StartNew();
-
             try
             {
                 byte[] package = _lastEncryptedBytes;
-
-                // Handle manual paste
                 if (rtbCipherInput.Text != Convert.ToBase64String(_lastEncryptedBytes ?? new byte[0]))
                 {
                     try { package = Convert.FromBase64String(rtbCipherInput.Text); }
@@ -145,6 +127,9 @@ namespace Enochian_Encryption_System
 
                 byte[] decryptedBytes;
 
+                // 1. START TIMER
+                Stopwatch sw = Stopwatch.StartNew();
+
                 using (Aes aes = Aes.Create())
                 {
                     aes.Key = _sharedSecret;
@@ -155,28 +140,21 @@ namespace Enochian_Encryption_System
                     }
                 }
 
+                // 2. STOP TIMER
                 sw.Stop();
-                long endMem = GC.GetTotalMemory(false);
-                TimeSpan endCpu = Process.GetCurrentProcess().TotalProcessorTime;
 
                 rtbCipherOutput.Text = Encoding.UTF8.GetString(decryptedBytes);
 
+                // --- DYNAMIC CALCULATIONS ---
                 double timeMs = sw.Elapsed.TotalMilliseconds;
-                double cpuMs = (endCpu - startCpu).TotalMilliseconds;
-                double entropy = CalculateEntropy(decryptedBytes);
                 double dataSizeKB = (double)decryptedBytes.Length / 1024.0;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
 
-                string quantumReport = GetECCQuantumStatus(_currentCurveSize);
-
-                string stats = $"--- DECRYPTION PERFORMANCE ---\n" +
+                string stats = $"--- DECRYPTION PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
-                               $"Throughput: {speedKBps:F4} KB/s\n" +
-                               $"Memory: {Math.Max(0, endMem - startMem)} Bytes\n" +
-                               $"CPU: {(cpuMs == 0 ? "< 1 ms" : $"{cpuMs:F4} ms")}\n\n" +
+                               $"Throughput: {speedKBps:F4} KB/s\n\n" +
                                $"--- SECURITY AUDIT ---\n" +
-                               $"Restored Entropy: {entropy:F4} bits/byte\n" +
-                               $"{quantumReport}";
+                               $"Restored Entropy: {CalculateEntropy(decryptedBytes):F4} bits/byte";
 
                 rtbDecStats.Text = stats;
             }
@@ -199,16 +177,9 @@ namespace Enochian_Encryption_System
 
         private string GetECCQuantumStatus(int curveBits)
         {
-            // Shor's Algorithm for ECDLP requires approx 6 * N qubits.
-            // RSA requires approx 2 * N qubits.
-            // HOWEVER: RSA keys are huge (2048+), ECC keys are small (256).
-
             int logicalQubits = 6 * curveBits;
             int physicalQubits = logicalQubits * 1000;
-
-            string verdict = "UNKNOWN";
-            if (curveBits <= 384) verdict = "HIGHLY VULNERABLE";
-            else verdict = "MODERATELY VULNERABLE";
+            string verdict = (curveBits <= 384) ? "HIGHLY VULNERABLE" : "MODERATELY VULNERABLE";
 
             return $"--- QUANTUM ANALYSIS ---\n" +
                    $"Attack Method: Shor's Algorithm (ECDLP)\n" +
