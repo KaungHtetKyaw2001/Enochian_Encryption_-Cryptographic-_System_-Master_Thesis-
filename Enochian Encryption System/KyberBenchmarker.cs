@@ -30,7 +30,7 @@ namespace Enochian_Encryption_System
             _privateKey = (MLKemPrivateKeyParameters)keyPair.Private;
         }
 
-        public long BenchmarkEncryption(byte[] plaintextDocument, out byte[] encryptedDocument)
+        public double BenchmarkEncryption(byte[] plaintextDocument, out byte[] encryptedDocument)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -42,7 +42,6 @@ namespace Enochian_Encryption_System
             _encapsulatedSecret = new byte[encapsulator.EncapsulationLength];
             byte[] sharedSecret = new byte[encapsulator.SecretLength];
 
-            // Perform the encapsulation
             encapsulator.Encapsulate(_encapsulatedSecret, 0, _encapsulatedSecret.Length, sharedSecret, 0, sharedSecret.Length);
 
             // STEP 2: AES-256 Encryption
@@ -65,10 +64,11 @@ namespace Enochian_Encryption_System
             }
 
             sw.Stop();
-            return sw.ElapsedMilliseconds;
+            // Use TotalMilliseconds to get high-precision decimals (e.g., 0.0234 ms)
+            return sw.Elapsed.TotalMilliseconds;
         }
 
-        public long BenchmarkDecryption(byte[] encryptedDocument)
+        public double BenchmarkDecryption(byte[] encryptedDocument)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -78,7 +78,6 @@ namespace Enochian_Encryption_System
 
             byte[] decryptedSecret = new byte[decapsulator.SecretLength];
 
-            // Perform the decapsulation to recover the AES key
             decapsulator.Decapsulate(_encapsulatedSecret, 0, _encapsulatedSecret!.Length, decryptedSecret, 0, decryptedSecret.Length);
 
             // STEP 2: AES-256 Decryption
@@ -97,7 +96,8 @@ namespace Enochian_Encryption_System
             }
 
             sw.Stop();
-            return sw.ElapsedMilliseconds;
+            // Use TotalMilliseconds to get high-precision decimals
+            return sw.Elapsed.TotalMilliseconds;
         }
     }
 }

@@ -52,14 +52,14 @@ namespace Enochian_Encryption_System
                 txtProcessLog.AppendText(">> [AES]: Encrypting payload with ML-KEM-derived Secret...\r\n");
 
                 byte[] encryptedData;
-                long encTime = kyber.BenchmarkEncryption(fileBytesToTest, out encryptedData);
+                double encTime = kyber.BenchmarkEncryption(fileBytesToTest, out encryptedData);
                 txtProcessLog.AppendText($">> ENCRYPTION COMPLETE. Latency: {encTime} ms.\r\n\r\n");
 
                 // 5. DECRYPT
                 txtProcessLog.AppendText(">> [KEM]: Decapsulating Secret using ML-KEM Private Key...\r\n");
                 txtProcessLog.AppendText(">> [AES]: Decrypting payload with restored Secret...\r\n");
 
-                long decTime = kyber.BenchmarkDecryption(encryptedData);
+                double decTime = kyber.BenchmarkDecryption(encryptedData);
                 txtProcessLog.AppendText($">> DECRYPTION COMPLETE. Latency: {decTime} ms.\r\n");
 
                 // 6. Update the UI Labels
