@@ -45,9 +45,10 @@ namespace Enochian_Encryption_System
             byte[] dataToEncrypt = Encoding.UTF8.GetBytes(rtbPlainInput.Text);
             double dataSizeKB = (double)dataToEncrypt.Length / 1024.0;
 
-            // 1. SETUP (Outside Timer)
+            // 1. MEMORY SETUP (Measure baseline)
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            long startMem = GC.GetTotalMemory(true);
 
             Aes aes = Aes.Create();
             aes.Key = _sharedSecret;
@@ -65,19 +66,19 @@ namespace Enochian_Encryption_System
                     encryptedData = encryptor.TransformFinalBlock(dataToEncrypt, 0, dataToEncrypt.Length);
                 }
 
-                // Combine IV + Ciphertext
                 List<byte> package = new List<byte>();
                 package.AddRange(iv);
                 package.AddRange(encryptedData);
                 _lastEncryptedBytes = package.ToArray();
 
-                // 3. STOP TIMER
                 sw.Stop();
+                long endMem = GC.GetTotalMemory(false);
 
                 // --- DYNAMIC CALCULATIONS ---
                 double timeMs = sw.Elapsed.TotalMilliseconds;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
                 double entropy = CalculateEntropy(_lastEncryptedBytes);
+                long memoryUsed = Math.Max(0, endMem - startMem);
                 string quantumReport = GetECCQuantumStatus(_currentCurveSize);
 
                 rtbPlainOutput.Text = Convert.ToBase64String(_lastEncryptedBytes);
@@ -85,7 +86,8 @@ namespace Enochian_Encryption_System
 
                 string stats = $"--- PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
-                               $"Throughput: {speedKBps:F4} KB/s\n\n" +
+                               $"Throughput: {speedKBps:F4} KB/s\n" +
+                               $"Memory: {memoryUsed} Bytes\n\n" +
                                $"--- SECURITY AUDIT ---\n" +
                                $"Entropy: {entropy:F4} bits/byte\n" +
                                $"Curve: NIST P-{_currentCurveSize}\n" +
@@ -107,7 +109,11 @@ namespace Enochian_Encryption_System
 
             rtbDecStats.Text = "Processing...";
             rtbCipherOutput.Clear();
+
+            // 1. MEMORY SETUP
             GC.Collect();
+            GC.WaitForPendingFinalizers();
+            long startMem = GC.GetTotalMemory(true);
 
             try
             {
@@ -127,7 +133,7 @@ namespace Enochian_Encryption_System
 
                 byte[] decryptedBytes;
 
-                // 1. START TIMER
+                // 2. START TIMER
                 Stopwatch sw = Stopwatch.StartNew();
 
                 using (Aes aes = Aes.Create())
@@ -140,8 +146,8 @@ namespace Enochian_Encryption_System
                     }
                 }
 
-                // 2. STOP TIMER
                 sw.Stop();
+                long endMem = GC.GetTotalMemory(false);
 
                 rtbCipherOutput.Text = Encoding.UTF8.GetString(decryptedBytes);
 
@@ -149,10 +155,12 @@ namespace Enochian_Encryption_System
                 double timeMs = sw.Elapsed.TotalMilliseconds;
                 double dataSizeKB = (double)decryptedBytes.Length / 1024.0;
                 double speedKBps = (timeMs > 0) ? (dataSizeKB / (timeMs / 1000.0)) : 0;
+                long memoryUsed = Math.Max(0, endMem - startMem);
 
                 string stats = $"--- DECRYPTION PERFORMANCE (Payload: {dataSizeKB:F4} KB) ---\n" +
                                $"Time: {timeMs:F4} ms\n" +
-                               $"Throughput: {speedKBps:F4} KB/s\n\n" +
+                               $"Throughput: {speedKBps:F4} KB/s\n" +
+                               $"Memory: {memoryUsed} Bytes\n\n" +
                                $"--- SECURITY AUDIT ---\n" +
                                $"Restored Entropy: {CalculateEntropy(decryptedBytes):F4} bits/byte";
 
