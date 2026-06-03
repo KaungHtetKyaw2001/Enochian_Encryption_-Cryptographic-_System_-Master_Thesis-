@@ -34,5 +34,11 @@ namespace Enochian_Encryption_System
             FrmECC ECCForm = new FrmECC();
             ECCForm.ShowDialog();
         }
+
+        private void btnKyber_Click(object sender, EventArgs e)
+        {
+            FrmKyber kyberForm = new FrmKyber();
+            kyberForm.ShowDialog();
+        }
     }
 }

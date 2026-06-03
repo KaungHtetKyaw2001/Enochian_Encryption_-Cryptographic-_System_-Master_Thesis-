@@ -340,6 +340,9 @@ namespace Enochian_Encryption_System
             double maxTheoreticalEntropy = Math.Log(21, 2);
             double efficiency = (entropy / maxTheoreticalEntropy) * 100;
 
+            // [NEW FIX] Calculate Projected Base-256 Entropy for Presentation
+            double projectedEntropy = (efficiency / 100.0) * 8.0;
+
             string quality = "";
             if (efficiency > 90.0) quality = "Excellent (Near-Perfect Randomness for Mod 21)";
             else if (efficiency > 70.0) quality = "Moderate";
@@ -351,6 +354,7 @@ namespace Enochian_Encryption_System
                             $"Shannon Entropy: {entropy:F4} bits/symbol\n" +
                             $"(Theoretical Max for Mod 21: {maxTheoreticalEntropy:F4})\n\n" +
                             $"Randomness Efficiency: {efficiency:F2}%\n" +
+                            $"Projected Base-256 Equivalent: {projectedEntropy:F2} / 8.00\n\n" +
                             $"Histogram Variance: {variance:F2}\n\n" +
                             $"Conclusion: {quality}";
 
@@ -494,9 +498,6 @@ namespace Enochian_Encryption_System
                     $"Result: Enochian requires significantly fewer operations despite the cubic complexity.",
                     "Big-O Analysis");
         }
-        // --- PASTE IN EncryptForm.cs ---
-
-        // --- PASTE IN EncryptForm.cs ---
 
         private void btnNIST_Click(object sender, EventArgs e)
         {
@@ -558,7 +559,6 @@ namespace Enochian_Encryption_System
         }
 
         // --- HELPER 2: CHART POPUP ---
-        // --- REPLACE YOUR ShowNistChart FUNCTION WITH THIS ---
         private void ShowNistChart(string mode, int count, double t1, double t2, double t3, double t4)
         {
             Form report = new Form();

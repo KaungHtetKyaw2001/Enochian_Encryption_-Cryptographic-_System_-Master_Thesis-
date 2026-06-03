@@ -36,6 +36,7 @@
             label3 = new Label();
             btnRSA = new Button();
             btnECC = new Button();
+            btnKyber = new Button();
             SuspendLayout();
             // 
             // label1
@@ -114,8 +115,8 @@
             // 
             btnRSA.BackColor = Color.DarkGray;
             btnRSA.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnRSA.ForeColor = SystemColors.ButtonHighlight;
-            btnRSA.Location = new Point(76, 391);
+            btnRSA.ForeColor = SystemColors.ActiveCaptionText;
+            btnRSA.Location = new Point(22, 390);
             btnRSA.Name = "btnRSA";
             btnRSA.Size = new Size(172, 90);
             btnRSA.TabIndex = 6;
@@ -127,8 +128,8 @@
             // 
             btnECC.BackColor = Color.DarkGray;
             btnECC.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnECC.ForeColor = SystemColors.ButtonHighlight;
-            btnECC.Location = new Point(331, 390);
+            btnECC.ForeColor = SystemColors.ActiveCaptionText;
+            btnECC.Location = new Point(200, 390);
             btnECC.Name = "btnECC";
             btnECC.Size = new Size(172, 90);
             btnECC.TabIndex = 7;
@@ -136,11 +137,25 @@
             btnECC.UseVisualStyleBackColor = false;
             btnECC.Click += btnECC_Click;
             // 
+            // btnKyber
+            // 
+            btnKyber.BackColor = Color.DarkGray;
+            btnKyber.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnKyber.ForeColor = SystemColors.ActiveCaptionText;
+            btnKyber.Location = new Point(378, 390);
+            btnKyber.Name = "btnKyber";
+            btnKyber.Size = new Size(172, 90);
+            btnKyber.TabIndex = 8;
+            btnKyber.Text = "Run Kyber";
+            btnKyber.UseVisualStyleBackColor = false;
+            btnKyber.Click += btnKyber_Click;
+            // 
             // EnochianEncryptionSystem
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(597, 540);
+            ClientSize = new Size(598, 540);
+            Controls.Add(btnKyber);
             Controls.Add(btnECC);
             Controls.Add(btnRSA);
             Controls.Add(label3);
@@ -165,5 +180,6 @@
         private Label label3;
         private Button btnRSA;
         private Button btnECC;
+        private Button btnKyber;
     }
 }
