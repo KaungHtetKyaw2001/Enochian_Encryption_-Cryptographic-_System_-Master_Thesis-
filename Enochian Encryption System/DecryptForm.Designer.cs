@@ -117,7 +117,7 @@
             btnRegeneration.Name = "btnRegeneration";
             btnRegeneration.Size = new Size(171, 94);
             btnRegeneration.TabIndex = 4;
-            btnRegeneration.Text = "Step 5: Regeneration (Reuse) Given by Sender's Encrypt Infomation";
+            btnRegeneration.Text = "Step 5: Regeneration (Reuse) Given by Sender's Encrypt Information";
             btnRegeneration.UseVisualStyleBackColor = true;
             btnRegeneration.Click += btnRegeneration_Click;
             // 

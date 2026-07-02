@@ -91,9 +91,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(16, 73);
             label2.Name = "label2";
-            label2.Size = new Size(144, 40);
+            label2.Size = new Size(138, 40);
             label2.TabIndex = 1;
-            label2.Text = "Shuffle Seed:\r\n(Lorentz X + Y + Z)";
+            label2.Text = "Shuffle Seed:\r\n(Lorenz X + Y + Z)";
             // 
             // label1
             // 

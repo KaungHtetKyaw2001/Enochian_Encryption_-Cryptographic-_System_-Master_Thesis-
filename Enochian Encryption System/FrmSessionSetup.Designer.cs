@@ -70,9 +70,9 @@
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label3.Location = new Point(26, 133);
             label3.Name = "label3";
-            label3.Size = new Size(172, 20);
+            label3.Size = new Size(166, 20);
             label3.TabIndex = 2;
-            label3.Text = "First Lorentz Input (x0)";
+            label3.Text = "First Lorenz Input (x0)";
             // 
             // label4
             // 
@@ -80,9 +80,9 @@
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label4.Location = new Point(26, 184);
             label4.Name = "label4";
-            label4.Size = new Size(191, 20);
+            label4.Size = new Size(185, 20);
             label4.TabIndex = 3;
-            label4.Text = "Second Lorentz Input (x1)";
+            label4.Text = "Second Lorenz Input (x1)";
             // 
             // label5
             // 
@@ -90,9 +90,9 @@
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label5.Location = new Point(26, 240);
             label5.Name = "label5";
-            label5.Size = new Size(178, 20);
+            label5.Size = new Size(172, 20);
             label5.TabIndex = 4;
-            label5.Text = "Third Lorentz Input (x3)";
+            label5.Text = "Third Lorenz Input (x2)";
             // 
             // txtC1
             // 

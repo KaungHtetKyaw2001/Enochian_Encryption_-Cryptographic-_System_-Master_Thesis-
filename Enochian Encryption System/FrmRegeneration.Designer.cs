@@ -37,28 +37,28 @@
             label2 = new Label();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            dgvBaseKeyMatrix = new DataGridView();
+            label10 = new Label();
+            btnConfirm = new Button();
+            label7 = new Label();
             btnReconstruct = new Button();
             dgvKeyFactorMultipliedMatrix = new DataGridView();
             groupBox3 = new GroupBox();
-            btnConfirm = new Button();
+            lblMultipleFactorCheck = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            lblModuloCheck = new Label();
+            lblKeyFactor = new Label();
+            label6 = new Label();
             lblValidation = new Label();
             lblDeterminant = new Label();
             label5 = new Label();
             label4 = new Label();
-            label6 = new Label();
-            lblKeyFactor = new Label();
-            lblModuloCheck = new Label();
-            label8 = new Label();
-            label9 = new Label();
-            lblMultipleFactorCheck = new Label();
-            label7 = new Label();
-            label10 = new Label();
-            dgvBaseKeyMatrix = new DataGridView();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvBaseKeyMatrix).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvKeyFactorMultipliedMatrix).BeginInit();
             groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvBaseKeyMatrix).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -121,27 +121,27 @@
             label3.ForeColor = SystemColors.ButtonShadow;
             label3.Location = new Point(20, 168);
             label3.Name = "label3";
-            label3.Size = new Size(132, 20);
+            label3.Size = new Size(126, 20);
             label3.TabIndex = 2;
-            label3.Text = "Lorentz Z Unused";
+            label3.Text = "Lorenz Z Unused";
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(20, 100);
             label2.Name = "label2";
-            label2.Size = new Size(168, 20);
+            label2.Size = new Size(162, 20);
             label2.TabIndex = 1;
-            label2.Text = "Lorentz Y / S-Box Seed";
+            label2.Text = "Lorenz Y / S-Box Seed";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(20, 39);
             label1.Name = "label1";
-            label1.Size = new Size(154, 20);
+            label1.Size = new Size(148, 20);
             label1.TabIndex = 0;
-            label1.Text = "Lorentz X / Key Seed";
+            label1.Text = "Lorenz X / Key Seed";
             // 
             // groupBox2
             // 
@@ -157,7 +157,44 @@
             groupBox2.Size = new Size(1140, 446);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Matrix Reconstuction";
+            groupBox2.Text = "Matrix Reconstruction";
+            // 
+            // dgvBaseKeyMatrix
+            // 
+            dgvBaseKeyMatrix.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvBaseKeyMatrix.Location = new Point(577, 67);
+            dgvBaseKeyMatrix.Name = "dgvBaseKeyMatrix";
+            dgvBaseKeyMatrix.RowHeadersWidth = 51;
+            dgvBaseKeyMatrix.Size = new Size(547, 338);
+            dgvBaseKeyMatrix.TabIndex = 17;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(587, 33);
+            label10.Name = "label10";
+            label10.Size = new Size(122, 20);
+            label10.TabIndex = 16;
+            label10.Text = "Base Key Matrix";
+            // 
+            // btnConfirm
+            // 
+            btnConfirm.Location = new Point(993, 411);
+            btnConfirm.Name = "btnConfirm";
+            btnConfirm.Size = new Size(141, 29);
+            btnConfirm.TabIndex = 2;
+            btnConfirm.Text = "Confirm and Save";
+            btnConfirm.UseVisualStyleBackColor = true;
+            btnConfirm.Click += btnConfirm_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(10, 33);
+            label7.Name = "label7";
+            label7.Size = new Size(208, 20);
+            label7.TabIndex = 15;
+            label7.Text = "Key Factor Multiplied Matrix";
             // 
             // btnReconstruct
             // 
@@ -198,15 +235,62 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Validation Check";
             // 
-            // btnConfirm
+            // lblMultipleFactorCheck
             // 
-            btnConfirm.Location = new Point(993, 411);
-            btnConfirm.Name = "btnConfirm";
-            btnConfirm.Size = new Size(141, 29);
-            btnConfirm.TabIndex = 2;
-            btnConfirm.Text = "Confirm and Save";
-            btnConfirm.UseVisualStyleBackColor = true;
-            btnConfirm.Click += btnConfirm_Click;
+            lblMultipleFactorCheck.BorderStyle = BorderStyle.FixedSingle;
+            lblMultipleFactorCheck.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
+            lblMultipleFactorCheck.ForeColor = SystemColors.ButtonShadow;
+            lblMultipleFactorCheck.Location = new Point(171, 186);
+            lblMultipleFactorCheck.Name = "lblMultipleFactorCheck";
+            lblMultipleFactorCheck.Size = new Size(424, 33);
+            lblMultipleFactorCheck.TabIndex = 14;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(8, 186);
+            label9.Name = "label9";
+            label9.Size = new Size(137, 40);
+            label9.TabIndex = 13;
+            label9.Text = "21 Multiple Factor\r\nCheck";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(8, 138);
+            label8.Name = "label8";
+            label8.Size = new Size(108, 20);
+            label8.TabIndex = 12;
+            label8.Text = "Modulo Check";
+            // 
+            // lblModuloCheck
+            // 
+            lblModuloCheck.BorderStyle = BorderStyle.FixedSingle;
+            lblModuloCheck.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
+            lblModuloCheck.ForeColor = SystemColors.ButtonShadow;
+            lblModuloCheck.Location = new Point(171, 131);
+            lblModuloCheck.Name = "lblModuloCheck";
+            lblModuloCheck.Size = new Size(424, 33);
+            lblModuloCheck.TabIndex = 11;
+            // 
+            // lblKeyFactor
+            // 
+            lblKeyFactor.BorderStyle = BorderStyle.FixedSingle;
+            lblKeyFactor.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
+            lblKeyFactor.ForeColor = SystemColors.ButtonShadow;
+            lblKeyFactor.Location = new Point(171, 76);
+            lblKeyFactor.Name = "lblKeyFactor";
+            lblKeyFactor.Size = new Size(424, 33);
+            lblKeyFactor.TabIndex = 10;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(9, 86);
+            label6.Name = "label6";
+            label6.Size = new Size(83, 20);
+            label6.TabIndex = 9;
+            label6.Text = "Key Factor";
             // 
             // lblValidation
             // 
@@ -246,90 +330,6 @@
             label4.TabIndex = 6;
             label4.Text = "Determinant";
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(9, 86);
-            label6.Name = "label6";
-            label6.Size = new Size(83, 20);
-            label6.TabIndex = 9;
-            label6.Text = "Key Factor";
-            // 
-            // lblKeyFactor
-            // 
-            lblKeyFactor.BorderStyle = BorderStyle.FixedSingle;
-            lblKeyFactor.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
-            lblKeyFactor.ForeColor = SystemColors.ButtonShadow;
-            lblKeyFactor.Location = new Point(171, 76);
-            lblKeyFactor.Name = "lblKeyFactor";
-            lblKeyFactor.Size = new Size(424, 33);
-            lblKeyFactor.TabIndex = 10;
-            // 
-            // lblModuloCheck
-            // 
-            lblModuloCheck.BorderStyle = BorderStyle.FixedSingle;
-            lblModuloCheck.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
-            lblModuloCheck.ForeColor = SystemColors.ButtonShadow;
-            lblModuloCheck.Location = new Point(171, 131);
-            lblModuloCheck.Name = "lblModuloCheck";
-            lblModuloCheck.Size = new Size(424, 33);
-            lblModuloCheck.TabIndex = 11;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(8, 138);
-            label8.Name = "label8";
-            label8.Size = new Size(108, 20);
-            label8.TabIndex = 12;
-            label8.Text = "Modulo Check";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(8, 186);
-            label9.Name = "label9";
-            label9.Size = new Size(137, 40);
-            label9.TabIndex = 13;
-            label9.Text = "21 Multiple Factor\r\nCheck";
-            // 
-            // lblMultipleFactorCheck
-            // 
-            lblMultipleFactorCheck.BorderStyle = BorderStyle.FixedSingle;
-            lblMultipleFactorCheck.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
-            lblMultipleFactorCheck.ForeColor = SystemColors.ButtonShadow;
-            lblMultipleFactorCheck.Location = new Point(171, 186);
-            lblMultipleFactorCheck.Name = "lblMultipleFactorCheck";
-            lblMultipleFactorCheck.Size = new Size(424, 33);
-            lblMultipleFactorCheck.TabIndex = 14;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(10, 33);
-            label7.Name = "label7";
-            label7.Size = new Size(208, 20);
-            label7.TabIndex = 15;
-            label7.Text = "Key Factor Multiplied Matrix";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(587, 33);
-            label10.Name = "label10";
-            label10.Size = new Size(122, 20);
-            label10.TabIndex = 16;
-            label10.Text = "Base Key Matrix";
-            // 
-            // dgvBaseKeyMatrix
-            // 
-            dgvBaseKeyMatrix.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvBaseKeyMatrix.Location = new Point(577, 67);
-            dgvBaseKeyMatrix.Name = "dgvBaseKeyMatrix";
-            dgvBaseKeyMatrix.RowHeadersWidth = 51;
-            dgvBaseKeyMatrix.Size = new Size(547, 338);
-            dgvBaseKeyMatrix.TabIndex = 17;
-            // 
             // FrmRegeneration
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -345,10 +345,10 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvBaseKeyMatrix).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvKeyFactorMultipliedMatrix).EndInit();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvBaseKeyMatrix).EndInit();
             ResumeLayout(false);
         }
 

@@ -236,9 +236,9 @@
             label11.AutoSize = true;
             label11.Location = new Point(19, 39);
             label11.Name = "label11";
-            label11.Size = new Size(141, 20);
+            label11.Size = new Size(132, 20);
             label11.TabIndex = 0;
-            label11.Text = "Inversed Multiplier";
+            label11.Text = "Inverse Multiplier";
             // 
             // groupBox4
             // 

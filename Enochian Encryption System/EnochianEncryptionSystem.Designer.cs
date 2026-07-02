@@ -106,9 +106,9 @@
             label3.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             label3.Location = new Point(76, 327);
             label3.Name = "label3";
-            label3.Size = new Size(427, 32);
+            label3.Size = new Size(440, 32);
             label3.TabIndex = 5;
-            label3.Text = "Make Comprisons with RSA and ECC";
+            label3.Text = "Make Comparisons with RSA and ECC";
             label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnRSA
